@@ -11,20 +11,26 @@ const Content = (props) => {
   return (
     <>
       <p>
-        {props.content} {props.exercises}
+        {props.content1} {props.exercises1}
+      </p>
+      <p>
+        {props.content2} {props.exercises2}
+      </p>
+      <p>
+        {props.content3} {props.exercises3}
       </p>
     </>
   );
 };
 
-const Total = (props) =>{
-  console.log(props)
+const Total = (props) => {
+  console.log(props);
   return (
     <>
-     <p>Number of exercises : {props.total}</p>
+      <p>Number of exercises : {props.total}</p>
     </>
-  )
-}
+  );
+};
 
 const App = () => {
   const course = "Half Stack application development";
@@ -38,10 +44,15 @@ const App = () => {
   return (
     <div>
       <Header course={course} />
-      <Content content={part1} exercises={exercises1} />
-      <Content content={part2} exercises={exercises2} />
-      <Content content={part3} exercises={exercises3} />
-      <Total total={exercises1 + exercises2 + exercises3}/>
+      <Content
+        content1={part1}
+        content2={part2}
+        content3={part3}
+        exercises1={exercises1}
+        exercises2={exercises2}
+        exercises3={exercises3}
+      />
+      <Total total={exercises1 + exercises2 + exercises3} />
     </div>
   );
 };
