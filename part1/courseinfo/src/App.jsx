@@ -9,18 +9,10 @@ const Display = ({ value, text }) => (
     {text}
   </p>
 );
-const ConditionDisplay = ({ value, text }) => {
-  if (!value) {
-    return <p>no feedback given</p>;
-  }
-  return (
-    <p>
-      {value}
-      {text}
-    </p>
-  );
-};
 const Statistics = ({ good, neutral, bad, total, average, positives }) => {
+  if (total === 0) {
+    return <p>No feedback given</p>;
+  }
   return (
     <>
       <h2>Statistics</h2>
@@ -28,8 +20,8 @@ const Statistics = ({ good, neutral, bad, total, average, positives }) => {
       <Display value={neutral} text=" neutral" />
       <Display value={bad} text=" bad" />
       <Display value={total} text=" total" />
-      <ConditionDisplay value={average} text=" average" />
-      <ConditionDisplay value={positives} text=" % positive" />
+      <Display value={average} text=" average" />
+      <Display value={positives} text=" % positive" />
     </>
   );
 };
