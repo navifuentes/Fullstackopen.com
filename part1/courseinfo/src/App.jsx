@@ -20,6 +20,19 @@ const ConditionDisplay = ({ value, text }) => {
     </p>
   );
 };
+const Statistics = ({ good, neutral, bad, total, average, positives }) => {
+  return (
+    <>
+      <h2>Statistics</h2>
+      <Display value={good} text=" good" />
+      <Display value={neutral} text=" neutral" />
+      <Display value={bad} text=" bad" />
+      <Display value={total} text=" total" />
+      <ConditionDisplay value={average} text=" average" />
+      <ConditionDisplay value={positives} text=" % positive" />
+    </>
+  );
+};
 
 const App = () => {
   // guarda los clics de cada botón en su propio estado
@@ -35,13 +48,14 @@ const App = () => {
       <Button handleClick={() => setGood(good + 1)} text="good" />
       <Button handleClick={() => setNeutral(neutral + 1)} text="neutral" />
       <Button handleClick={() => setBad(bad + 1)} text="bad" />
-      <h2>Statistics</h2>
-      <Display value={good} text=" good" />
-      <Display value={neutral} text=" neutral" />
-      <Display value={bad} text=" bad" />
-      <Display value={total} text=" total" />
-      <ConditionDisplay value={average} text=" average" />
-      <ConditionDisplay value={positives} text=" % positive" />
+      <Statistics
+        good={good}
+        neutral={neutral}
+        bad={bad}
+        total={total}
+        average={average}
+        positives={positives}
+      />
     </>
   );
 };
