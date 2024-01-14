@@ -9,13 +9,26 @@ const Display = ({ value, text }) => (
     {text}
   </p>
 );
+const ConditionDisplay = ({ value, text }) => {
+  if (!value) {
+    return <p>no feedback given</p>;
+  }
+  return (
+    <p>
+      {value}
+      {text}
+    </p>
+  );
+};
 
 const App = () => {
   // guarda los clics de cada botón en su propio estado
   const [good, setGood] = useState(0);
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
-
+  const total = good + neutral + bad;
+  const average = (good - bad) / total;
+  const positives = (good * 100) / total;
   return (
     <>
       <h2>Give Feedback</h2>
@@ -26,6 +39,9 @@ const App = () => {
       <Display value={good} text=" good" />
       <Display value={neutral} text=" neutral" />
       <Display value={bad} text=" bad" />
+      <Display value={total} text=" total" />
+      <ConditionDisplay value={average} text=" average" />
+      <ConditionDisplay value={positives} text=" % positive" />
     </>
   );
 };
