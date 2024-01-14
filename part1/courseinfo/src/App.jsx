@@ -14,15 +14,40 @@ const Statistics = ({ good, neutral, bad, total, average, positives }) => {
     return <p>No feedback given</p>;
   }
   return (
-    <>
-      <h2>Statistics</h2>
-      <StatisticLine value={good} text=" good" />
-      <StatisticLine value={neutral} text=" neutral" />
-      <StatisticLine value={bad} text=" bad" />
-      <StatisticLine value={total} text=" total" />
-      <StatisticLine value={average} text=" average" />
-      <StatisticLine value={positives} text=" % positive" />
-    </>
+    <table>
+      <tbody>
+        {/* GOOD FEEDBACK */}
+        <tr>
+          <td>good</td>
+          <td>{good}</td>
+        </tr>
+        {/* NEUTRAL FEEDBACKS */}
+        <tr>
+          <td>neutral</td>
+          <td>{neutral}</td>
+        </tr>
+        {/* BAD FEEDBACKS */}
+        <tr>
+          <td>bad</td>
+          <td>{bad}</td>
+        </tr>
+        {/* TOTAL FEEDBACKS */}
+        <tr>
+          <td>total</td>
+          <td>{total}</td>
+        </tr>
+        {/* AVERAGE FEEDBACKS */}
+        <tr>
+          <td>average</td>
+          <td>{average}</td>
+        </tr>
+        {/* POSITIVES FEEDBACKS */}
+        <tr>
+          <td>positives</td>
+          <td>{positives} %</td>
+        </tr>
+      </tbody>
+    </table>
   );
 };
 
@@ -34,6 +59,7 @@ const App = () => {
   const total = good + neutral + bad;
   const average = (good - bad) / total;
   const positives = (good * 100) / total;
+
   return (
     <>
       <h2>Give Feedback</h2>
