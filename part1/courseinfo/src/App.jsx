@@ -4,6 +4,7 @@ const Button = ({ handleClick, text }) => (
   <button onClick={handleClick}>{text}</button>
 );
 const Display = ({ count }) => <p>has {count} votes</p>;
+const Title = ({ text }) => <h2>{text}</h2>;
 
 const App = () => {
   const anecdotes = [
@@ -19,11 +20,24 @@ const App = () => {
 
   const [votes, setVotes] = useState(new Uint8Array(anecdotes.length));
   const [selected, setSelected] = useState(0);
+  const [indexOfLargest, setIndexOfLargest] = useState(0);
 
   const copy = [...votes];
 
+  const findLargest = (arr) => {
+    let copyArr = [...arr];
+    let largest = 0;
+    for (let i = 0; i < copyArr.length; i++) {
+      if (copyArr[i] > largest) {
+        largest = copyArr[i];
+        setIndexOfLargest(copyArr.indexOf(largest));
+      }
+    }
+  };
+
   return (
     <>
+      <Title text="Anecdote of the day" />
       <div>{anecdotes[selected]}</div>
       <Display count={votes[selected]} />
       <Button
@@ -36,11 +50,12 @@ const App = () => {
         handleClick={() => {
           copy[selected] += 1;
           setVotes(copy);
+          findLargest(copy);
         }}
         text="vote"
       />
+      <p>{anecdotes[indexOfLargest]}</p>
     </>
   );
 };
-
 export default App;
