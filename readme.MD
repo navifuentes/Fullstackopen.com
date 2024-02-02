@@ -19,3 +19,5 @@
 - en "package.json", "scripts" agregar:
 
   > "server": "json-server -p3001 --watch db.json"
+
+## D -  Alterando datos en el servidor

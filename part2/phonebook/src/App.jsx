@@ -21,7 +21,14 @@ const App = () => {
     const personObject = {
       name: newName,
       number: newNumber,
+      id: `${persons.length + 1}`,
     };
+    axios
+      .post("http://localhost:3001/persons", personObject)
+      .then((response) => {
+        console.log(response.data);
+        return response.data;
+      });
 
     const isFound = persons.some((x) => {
       if (x.name === personObject.name) {
