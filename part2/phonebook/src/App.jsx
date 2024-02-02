@@ -18,7 +18,8 @@ const App = () => {
       setPersons(initalPersons);
     });
   }, []);
-  //  Funcion agregar personas
+
+  //  Funciones REST
   const addPerson = (e) => {
     e.preventDefault();
     const personObject = {
@@ -40,6 +41,13 @@ const App = () => {
       setNewName("");
     });
     return;
+  };
+  const deletePerson = (id) => {
+    window.confirm(`delete ${persons[id - 1].name} ?`)
+      ? personService.remove(id).then(() => {
+          setPersons(persons.filter((p) => p.id !== id));
+        })
+      : null;
   };
 
   // Manejadores de eventos
@@ -67,7 +75,7 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
-      <Results search={search} persons={persons} />
+      <Results search={search} persons={persons} deletePerson={deletePerson} />
     </div>
   );
 };
