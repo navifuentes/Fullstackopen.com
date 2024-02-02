@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+//  Service
+import personService from "./services/persons";
+// Components
 import Results from "./components/Results";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
@@ -10,12 +12,13 @@ const App = () => {
   const [newNumber, setNewNumber] = useState(0);
   const [search, setSearch] = useState([]);
 
+  //  Estado del array Persons
   useEffect(() => {
-    axios.get("http://localhost:3001/persons").then((response) => {
-      setPersons(response.data);
+    personService.getAll().then((initalPersons) => {
+      setPersons(initalPersons);
     });
   }, []);
-
+  //  Funcion agregar personas
   const addPerson = (e) => {
     e.preventDefault();
     const personObject = {
@@ -23,28 +26,23 @@ const App = () => {
       number: newNumber,
       id: `${persons.length + 1}`,
     };
-    axios
-      .post("http://localhost:3001/persons", personObject)
-      .then((response) => {
-        console.log(response.data);
-        return response.data;
-      });
-
     const isFound = persons.some((x) => {
       if (x.name === personObject.name) {
         return true;
       }
       return false;
     });
-
     if (isFound) {
       return alert(`${newName} is already added to phonebook`);
     }
-    setPersons(persons.concat(personObject));
-    setNewName("");
+    personService.create(personObject).then((returnedPersons) => {
+      setPersons(persons.concat(returnedPersons));
+      setNewName("");
+    });
     return;
   };
 
+  // Manejadores de eventos
   const handleChangeName = (e) => {
     setNewName(e.target.value);
   };
@@ -52,7 +50,6 @@ const App = () => {
     setNewNumber(e.target.value);
   };
   const handleSearch = (e) => {
-    console.log(e.target.value);
     let filter = e.target.value.toLowerCase();
     setSearch(persons.filter((x) => x.name.toLowerCase().includes(filter)));
   };
