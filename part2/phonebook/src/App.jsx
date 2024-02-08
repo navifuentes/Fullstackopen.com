@@ -5,12 +5,16 @@ import personService from "./services/persons";
 import Results from "./components/Results";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
+import Notification from "./components/Notification";
+import ErrorMessage from "./components/ErrorMessage";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState(0);
   const [search, setSearch] = useState([]);
+  const [notificationMessage, setNotificationMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   //  Estado del array Persons
   useEffect(() => {
@@ -47,7 +51,7 @@ const App = () => {
               ...personFound,
               number: newNumber,
             })
-            .then(
+            .then(() => {
               //update state
               setPersons(
                 persons.map((x) =>
@@ -55,20 +59,42 @@ const App = () => {
                     ? { ...personFound, number: newNumber }
                     : x
                 )
-              )
-            )
+              );
+              setNotificationMessage(
+                `${personFound.name} number has been modified`
+              );
+              setTimeout(() => {
+                setNotificationMessage(null);
+              }, 5000);
+            })
+            .catch((error) => {
+              setErrorMessage(`${personFound.name} is no longer in database`);
+              setTimeout(() => {
+                setErrorMessage(null);
+              }, 5000);
+            })
         : null;
     }
 
-    return personService.create(personObject).then((returnedPersons) => {
-      setPersons(persons.concat(returnedPersons));
+    return personService.create(personObject).then((returnedPerson) => {
+      setPersons(persons.concat(returnedPerson));
       setNewName("");
+      setNotificationMessage(`${returnedPerson.name} added to the list`);
+      setTimeout(() => {
+        setNotificationMessage(null);
+      }, 5000);
     });
   };
   const deletePerson = (id) => {
     window.confirm(`delete ${persons[id - 1].name} ?`)
       ? personService.remove(id).then(() => {
           setPersons(persons.filter((p) => p.id !== id));
+          setNotificationMessage(
+            `${persons[id - 1].name} has been deleted from list`
+          );
+          setTimeout(() => {
+            setNotificationMessage(null);
+          }, 5000);
         })
       : null;
   };
@@ -88,6 +114,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <ErrorMessage message={errorMessage} />
+      <Notification message={notificationMessage} />
       <Filter handleSearch={handleSearch} />
 
       <h3>add a new</h3>
