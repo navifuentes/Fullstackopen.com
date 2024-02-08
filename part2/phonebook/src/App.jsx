@@ -22,25 +22,48 @@ const App = () => {
   //  Funciones REST
   const addPerson = (e) => {
     e.preventDefault();
+    //Declarations
     const personObject = {
       name: newName,
       number: newNumber,
       id: `${persons.length + 1}`,
     };
+    let personFound = {};
+    //Find name
     const isFound = persons.some((x) => {
       if (x.name === personObject.name) {
+        personFound = x;
         return true;
       }
       return false;
     });
+    //If name found:
     if (isFound) {
-      return alert(`${newName} is already added to phonebook`);
+      return window.confirm(
+        `${newName} is already added to phonebook, replace the old number with a new one?`
+      )
+        ? personService //update Database
+            .update(personFound.id, {
+              ...personFound,
+              number: newNumber,
+            })
+            .then(
+              //update state
+              setPersons(
+                persons.map((x) =>
+                  x.id === personFound.id
+                    ? { ...personFound, number: newNumber }
+                    : x
+                )
+              )
+            )
+        : null;
     }
-    personService.create(personObject).then((returnedPersons) => {
+
+    return personService.create(personObject).then((returnedPersons) => {
       setPersons(persons.concat(returnedPersons));
       setNewName("");
     });
-    return;
   };
   const deletePerson = (id) => {
     window.confirm(`delete ${persons[id - 1].name} ?`)
