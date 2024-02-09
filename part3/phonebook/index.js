@@ -3,6 +3,7 @@ const app = express();
 
 app.use(express.json());
 
+//DATA
 let persons = [
   {
     id: 1,
@@ -25,6 +26,10 @@ let persons = [
     number: "39-23-6423122",
   },
 ];
+//FUNCTIONS
+const generateRandomId = () => {
+  return Math.floor(Math.random() * 100000);
+};
 
 //GET
 app.get("/", (req, res) => {
@@ -46,6 +51,23 @@ app.get("/info", (req, res) => {
   <p>Phonebook has info for ${persons.length} people<p>
   <p>${new Date()}</p>
   `);
+});
+//POST
+app.post("/api/persons", (req, res) => {
+  const body = req.body;
+
+  if (!body.number || !body.name) {
+    return res.status(400).json({
+      error: "person must contain name and number",
+    });
+  }
+  const person = {
+    name: body.name,
+    number: body.number,
+    id: generateRandomId(),
+  };
+  persons = persons.concat(person);
+  res.json(person);
 });
 //DELETE
 app.delete("/api/persons/:id", (req, res) => {
