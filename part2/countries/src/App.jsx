@@ -27,7 +27,6 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
   };
-
   const handleSearch = (e) => {
     e.preventDefault();
     setSearch(e.target.value);
