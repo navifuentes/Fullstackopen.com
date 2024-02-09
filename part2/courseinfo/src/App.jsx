@@ -7,7 +7,7 @@ const App = () => {
   const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState("");
   const [showAll, setShowAll] = useState(true);
-  const [errorMessage, setErrorMessage] = useState("Some error happened...");
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const Footer = () => {
     const footerStyle = {

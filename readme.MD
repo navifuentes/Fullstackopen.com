@@ -1,6 +1,12 @@
-# Part 2
+# Part 0
 
-## C - Obteniendo datos del servidor
+- Crear un repositorio con librerias React + Vite instaladas
+  > npm create vite@latest "name" -- --template react
+  > cd "name"
+  > npm install
+  > npm run dev
+
+# Part 2
 
 - instalar servidor JSON de manera global:
 
@@ -19,5 +25,3 @@
 - en "package.json", "scripts" agregar:
 
   > "server": "json-server -p3001 --watch db.json"
-
-## D -  Alterando datos en el servidor

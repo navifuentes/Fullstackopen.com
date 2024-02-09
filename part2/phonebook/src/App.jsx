@@ -108,7 +108,9 @@ const App = () => {
   };
   const handleSearch = (e) => {
     let filter = e.target.value.toLowerCase();
-    setSearch(persons.filter((x) => x.name.toLowerCase().includes(filter)));
+    setSearch(
+      persons.filter((x) => x.name.toLowerCase().includes(filter.toLowerCase()))
+    );
   };
 
   return (
