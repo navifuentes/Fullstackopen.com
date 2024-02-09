@@ -25,3 +25,20 @@
 - en "package.json", "scripts" agregar:
 
   > "server": "json-server -p3001 --watch db.json"
+
+# Part 3
+- instalar express para backend:
+
+  > npm i express
+
+- instalar nodemon como dependencia de desarrollo; esta nos permite que mire los cambios hechos y se actualize
+
+  > npm i --save-dev nodemon
+
+- agregamos en package.json>scripts :
+  
+  > "dev": "nodemon index.js",
+
+- corremos con el comando:
+
+  > npm run dev
