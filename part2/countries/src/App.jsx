@@ -32,6 +32,11 @@ function App() {
     e.preventDefault();
     setSearch(e.target.value);
   };
+  const handleClick = (name) => {
+    countriesService.getByName(name).then((data) => {
+      setResults([{ ...data }]);
+    });
+  };
 
   return (
     <>
@@ -39,7 +44,7 @@ function App() {
         Find countries : <input value={search} onChange={handleSearch} />
       </form>
       <br />
-      <Results results={results} />
+      <Results results={results} handleClick={handleClick} />
     </>
   );
 }

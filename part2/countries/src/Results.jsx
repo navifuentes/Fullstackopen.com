@@ -1,13 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 
-const Results = ({ results }) => {
+const Results = ({ results, handleClick }) => {
   if (results.length === 0) {
     return <div>Start typing to start searching countries</div>;
   }
   if (results.length === 1) {
     const [{ languages }] = results;
     const languagesArray = Object.values(languages);
- 
+
     return (
       <>
         <h2>{results[0].name.common}</h2>
@@ -20,12 +20,23 @@ const Results = ({ results }) => {
             <li key={x}>{x}</li>
           ))}
         </ul>
-        <img className="flag" src={results[0].flags.svg} alt={results[0].flags.alt} />
+        <img
+          className="flag"
+          src={results[0].flags.svg}
+          alt={results[0].flags.alt}
+        />
       </>
     );
   }
   if (results.length <= 10) {
-    return results.map((x) => <div key={x.name.common}>{x.name.common}</div>);
+    //Button Event
+
+    return results.map((x) => (
+      <div key={x.name.common}>
+        {x.name.common}{" "}
+        <button onClick={() => handleClick(x.name.common)}>show</button>
+      </div>
+    ));
   }
 
   return <div>Too many matches, specify another filter</div>;
