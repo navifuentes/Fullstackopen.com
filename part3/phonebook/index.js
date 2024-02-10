@@ -56,11 +56,21 @@ app.get("/info", (req, res) => {
 app.post("/api/persons", (req, res) => {
   const body = req.body;
 
+  const personExists = persons.find(
+    (p) => p.name.toLowerCase() === body.name.toLowerCase()
+  );
+
+  if (personExists) {
+    return res.status(400).json({
+      error: "name must be unique",
+    });
+  }
   if (!body.number || !body.name) {
     return res.status(400).json({
       error: "person must contain name and number",
     });
   }
+
   const person = {
     name: body.name,
     number: body.number,
