@@ -1,4 +1,4 @@
-# fly.toml app configuration file generated for phonebook-ofs-fly on 2024-02-12T19:35:10-03:00
+# fly.toml app configuration file generated for phonebook-ofs-fly on 2024-02-12T20:19:42-03:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
@@ -9,7 +9,7 @@ primary_region = 'eze'
 [build]
 
 [env]
-  PORT = "3001"
+  PORT = '3001'
 
 [http_service]
   internal_port = 3001
