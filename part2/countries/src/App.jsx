@@ -1,13 +1,27 @@
 import { useState, useEffect } from "react";
 import countriesService from "./services/countries";
+import weatherService from "./services/weather.js";
 import Results from "./Results.jsx";
+import Weather from "./Weather.jsx";
 
 function App() {
   const [countriesList, setCountriesList] = useState([]);
   const [search, setSearch] = useState("");
   const [results, setResults] = useState([]);
+  const [weatherData, setWeatherData] = useState(null);
 
   //EFFECT HOOK
+  // GET WEATHER
+  useEffect(() => {
+    if (results.length === 1) {
+      weatherService
+        .getWeather(results[0].capital[0])
+        .then((data) => setWeatherData(data));
+    }
+    if (results.length > 1) {
+      setWeatherData(null);
+    }
+  }, [results]);
   // GET ALL
   useEffect(() => {
     countriesService.getAll().then((initalCountries) => {
@@ -44,6 +58,7 @@ function App() {
       </form>
       <br />
       <Results results={results} handleClick={handleClick} />
+      <Weather data={weatherData} />
     </>
   );
 }

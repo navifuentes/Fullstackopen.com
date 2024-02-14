@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import weatherService from "./services/weather";
+import React from "react";
 
 const Results = ({ results, handleClick }) => {
   //NO SEARCH
@@ -8,49 +7,8 @@ const Results = ({ results, handleClick }) => {
   }
   //ONE COUNTRY
   if (results.length === 1) {
-    const [coords, setCoords] = useState({});
-    const [temp, setTemp] = useState({});
-
     const [{ languages }] = results;
     const languagesArray = Object.values(languages);
-
-    let coordsObject = {};
-    let weatherObject = {};
-
-    weatherService
-      .getCapitalGeo(results[0].capital[0])
-      .then((data) => {
-        //setCoords({ lat: data[0].lat, lon: data[0].lon });
-        // console.log("coords", coords);
-        coordsObject = {
-          lat: data[0].lat,
-          lon: data[0].lon,
-        };
-        console.log(coordsObject);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
-    weatherService
-      .getWeather(coordsObject.lat, coordsObject.lon)
-      .then((data) => {
-        // setTemp({
-        // temperature: data.main.temp,
-        // wind: data.wind.speed,
-        // icon: data.weather[0].icon,
-        // });
-        // console.log("temp", temp);
-        weatherObject = {
-          temperature: data.main.temp,
-          wind: data.wind.speed,
-          icon: data.weather[0].icon,
-        };
-        console.log(weatherObject);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
 
     return (
       <>
@@ -70,12 +28,13 @@ const Results = ({ results, handleClick }) => {
           alt={results[0].flags.alt}
         />
         <h2>Weather in {results[0].capital[0]}</h2>
-        <p>temperature: {weatherObject.temperature} °C</p>
+        {/*  <Weather data={weatherData} /> */}
+        {/* <p>temperature: {weatherData?.main.temp} °C</p>
         <img
-          src={`https://openweathermap.org/img/wn/${weatherObject.icon}@2x.png`}
+          src={`https://openweathermap.org/img/wn/${weatherData?.weather[0].icon}@2x.png`}
           alt=""
         />
-        <p>wind: {weatherObject.wind} m/s</p>
+        <p>wind: {weatherData?.wind.speed} m/s</p> */}
       </>
     );
   }
