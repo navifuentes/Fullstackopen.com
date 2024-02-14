@@ -67,22 +67,18 @@ app.get("/info", (req, res) => {
 
 //POST
 app.post("/api/persons", (req, res) => {
-  if (personExists) {
-    return res.status(400).json({
-      error: "name must be unique",
-    });
-  }
-  if (!body.number || !body.name) {
+  const { name, number } = req.body;
+
+  if (name === undefined || number === undefined) {
     return res.status(400).json({
       error: "person must contain name and number",
     });
   }
-
   const person = new Person({
-    name: body.name,
-    number: body.number,
+    name,
+    number,
   });
-  person.save().then((person) => res.json(person));
+  person.save().then((savedPerson) => res.json(savedPerson));
 });
 //DELETE
 app.delete("/api/persons/:id", (req, res) => {
