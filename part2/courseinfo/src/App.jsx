@@ -38,7 +38,6 @@ const App = () => {
     const noteObject = {
       content: newNote,
       important: Math.random() > 0.5,
-      id: `${notes.length + 1}`,
     };
     noteService.create(noteObject).then((returnedNote) => {
       setNotes(notes.concat(returnedNote));
@@ -55,7 +54,7 @@ const App = () => {
     const changedNote = { ...note, important: !note.important };
 
     noteService
-      .update(changedNote)
+      .update(id, changedNote)
       .then((returnedNote) => {
         setNotes(notes.map((note) => (note.id !== id ? note : returnedNote)));
       })
