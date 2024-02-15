@@ -75,14 +75,20 @@ const App = () => {
         : null;
     }
     // CREATE IF NOT FOUND
-    return personService.create(personObject).then((returnedPerson) => {
-      setPersons(persons.concat(returnedPerson));
-      setNewName("");
-      setNotificationMessage(`${returnedPerson.name} added to the list`);
-      setTimeout(() => {
-        setNotificationMessage(null);
-      }, 5000);
-    });
+    return personService
+      .create(personObject)
+      .then((returnedPerson) => {
+        setPersons(persons.concat(returnedPerson));
+        setNewName("");
+        setNotificationMessage(`${returnedPerson.name} added to the list`);
+        setTimeout(() => {
+          setNotificationMessage(null);
+        }, 5000);
+      })
+      .catch((err) => {
+        const { error } = err.response.data;
+        setErrorMessage(error);
+      });
   };
   const deletePerson = (person) => {
     window.confirm(`delete ${person.name} ?`)
