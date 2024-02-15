@@ -5,7 +5,7 @@ const Results = ({ search, persons, deletePerson }) => {
     return persons.map((x) => (
       <div key={x.name}>
         {x.name} {x.number}{" "}
-        <button onClick={() => deletePerson(x.id)}>delete</button>
+        <button onClick={() => deletePerson(x)}>delete</button>
       </div>
     ));
   }
@@ -13,7 +13,7 @@ const Results = ({ search, persons, deletePerson }) => {
   return search.map((x) => (
     <div key={x.name}>
       {x.name} {x.number}{" "}
-      <button onClick={() => deletePerson(x.id)}>delete</button>
+      <button onClick={() => deletePerson(x)}>delete</button>
     </div>
   ));
 };

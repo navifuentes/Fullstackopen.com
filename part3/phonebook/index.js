@@ -36,12 +36,10 @@ app.get("/api/persons/:id", (req, res, next) => {
     .catch((err) => next(err));
 });
 app.get("/info", (req, res) => {
-  Person.find({}).then((persons) =>
-    res.send(`
-  <p>Phonebook has info for ${persons.length} people<p>
-  <p>${new Date()}</p>
-  `)
-  );
+  Person.find({}).then((persons) => {
+    let info = { people: persons.length, date: new Date() };
+    res.json(info);
+  });
 });
 
 //POST
@@ -58,6 +56,21 @@ app.post("/api/persons", (req, res) => {
     number,
   });
   person.save().then((savedPerson) => res.json(savedPerson));
+});
+
+//PUT
+app.put("/api/persons/:id", (req, res, next) => {
+  const { number } = req.body;
+  const { id } = req.params;
+  Person.findByIdAndUpdate(id, { number }, { new: true })
+    .then((result) => {
+      console.log("result", result);
+      if (result === null) {
+        res.status(404).send({ error: "person not found" });
+      }
+      res.json(result);
+    })
+    .catch((err) => next(err));
 });
 
 //DELETE

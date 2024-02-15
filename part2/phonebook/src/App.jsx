@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-//  Service
+//  SERVICE
 import personService from "./services/persons";
-// Components
+// COMPONENTS
 import Results from "./components/Results";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
@@ -16,26 +16,25 @@ const App = () => {
   const [notificationMessage, setNotificationMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  //  Estado del array Persons
+  //  PERSONS [] STATE
   useEffect(() => {
     personService.getAll().then((initalPersons) => {
       setPersons(initalPersons);
     });
   }, []);
 
-  //  Funciones REST
+  //  REST FUNCT
   const addPerson = (e) => {
     e.preventDefault();
     //Declarations
     const personObject = {
       name: newName,
       number: newNumber,
-      id: `${persons.length + 1}`,
     };
     let personFound = {};
     //Find name
     const isFound = persons.some((x) => {
-      if (x.name === personObject.name) {
+      if (x.name.toLowerCase() === personObject.name.toLowerCase()) {
         personFound = x;
         return true;
       }
@@ -75,7 +74,7 @@ const App = () => {
             })
         : null;
     }
-
+    // CREATE IF NOT FOUND
     return personService.create(personObject).then((returnedPerson) => {
       setPersons(persons.concat(returnedPerson));
       setNewName("");
@@ -85,13 +84,11 @@ const App = () => {
       }, 5000);
     });
   };
-  const deletePerson = (id) => {
-    window.confirm(`delete ${persons[id - 1].name} ?`)
-      ? personService.remove(id).then(() => {
-          setPersons(persons.filter((p) => p.id !== id));
-          setNotificationMessage(
-            `${persons[id - 1].name} has been deleted from list`
-          );
+  const deletePerson = (person) => {
+    window.confirm(`delete ${person.name} ?`)
+      ? personService.remove(person.id).then(() => {
+          setPersons(persons.filter((p) => p.id !== person.id));
+          setNotificationMessage(`${person.name} has been deleted from list`);
           setTimeout(() => {
             setNotificationMessage(null);
           }, 5000);
@@ -99,7 +96,7 @@ const App = () => {
       : null;
   };
 
-  // Manejadores de eventos
+  // EVENTS HANDLERS
   const handleChangeName = (e) => {
     setNewName(e.target.value);
   };
@@ -112,7 +109,6 @@ const App = () => {
       persons.filter((x) => x.name.toLowerCase().includes(filter.toLowerCase()))
     );
   };
-
   return (
     <div>
       <h2>Phonebook</h2>
