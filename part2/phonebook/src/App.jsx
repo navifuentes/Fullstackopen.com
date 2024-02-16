@@ -66,8 +66,9 @@ const App = () => {
                 setNotificationMessage(null);
               }, 5000);
             })
-            .catch((error) => {
-              setErrorMessage(`${personFound.name} is no longer in database`);
+            .catch((err) => {
+              const { error } = err.response.data;
+              setErrorMessage(`Invalid telephone number`);
               setTimeout(() => {
                 setErrorMessage(null);
               }, 5000);
@@ -86,8 +87,11 @@ const App = () => {
         }, 5000);
       })
       .catch((err) => {
-        const { error } = err.response.data;
-        setErrorMessage(error);
+        // const { error } = err.response.data;
+        setErrorMessage(`Name must be at least 3 characters`);
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 5000);
       });
   };
   const deletePerson = (person) => {

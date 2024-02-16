@@ -27,6 +27,7 @@
   > "server": "json-server -p3001 --watch db.json"
 
 # Part 3
+
 - instalar express para backend:
 
   > npm i express
@@ -36,9 +37,15 @@
   > npm i --save-dev nodemon
 
 - agregamos en package.json>scripts :
-  
+
   > "dev": "nodemon index.js",
 
 - corremos con el comando:
 
   > npm run dev
+
+  _Deploy_
+
+- para Fly.io; establecer el valor de variables de entorno desde la consola:
+
+  > fly secrets set MONGODB_URI="mongodb+srv://fullstack:thepasswordishere@cluster0.o1opl.mongodb.net/noteApp?retryWrites=true&w=majority"
