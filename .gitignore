@@ -1,3 +1,4 @@
+test.js
 /part0/index.html
 
 /part2/courseinfo
@@ -7,3 +8,4 @@
 /part3/courseinfo
 /part3/phonebook/node_modules
 /part3/phonebook/.env
+/part3/phonebook/mongo.js

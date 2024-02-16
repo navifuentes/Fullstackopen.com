@@ -45,7 +45,7 @@ app.get("/info", (req, res) => {
 //POST
 app.post("/api/persons", (req, res, next) => {
   const { name, number } = req.body;
-  
+
   const person = new Person({
     name,
     number,
