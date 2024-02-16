@@ -45,12 +45,7 @@ app.get("/info", (req, res) => {
 //POST
 app.post("/api/persons", (req, res, next) => {
   const { name, number } = req.body;
-  /* 
-  if (name === undefined || number === undefined) {
-    return res.status(400).json({
-      error: "person must contain name and number",
-    });
-  } */
+  
   const person = new Person({
     name,
     number,
@@ -65,7 +60,8 @@ app.post("/api/persons", (req, res, next) => {
 app.put("/api/persons/:id", (req, res, next) => {
   const { number } = req.body;
   const { id } = req.params;
-  Person.findByIdAndUpdate(id, { number }, { new: true })
+
+  Person.findByIdAndUpdate(id, { number }, { runValidators: true, new: true })
     .then((result) => {
       console.log("result", result);
       if (result === null) {

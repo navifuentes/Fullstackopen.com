@@ -18,7 +18,11 @@ mongoose
 
 const personSchema = new mongoose.Schema({
   name: { type: String, minLength: 3, required: true },
-  number: { type: String, required: true },
+  number: {
+    type: String,
+    required: true,
+    validate: (v) => v.match(/^((\d{2,3})-{1}(\d{6,}))$/g),
+  },
 });
 
 personSchema.set("toJSON", {
