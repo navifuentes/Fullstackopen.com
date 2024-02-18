@@ -1,6 +1,7 @@
-require("dotenv").config();
 const express = require("express");
-const app = express();
+const app = require("./app");
+const config = require("./utils/config");
+const logger = require("./utils/logger");
 const morgan = require("morgan");
 const cors = require("cors");
 const Person = require("./models/person");
@@ -100,7 +101,6 @@ const errorHandler = (error, request, response, next) => {
 };
 app.use(errorHandler);
 
-const PORT = process.env.PORT;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.listen(config.PORT, () => {
+  logger.info(`Server running on port ${config.PORT}`);
 });
