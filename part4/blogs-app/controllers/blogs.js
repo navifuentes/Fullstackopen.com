@@ -2,26 +2,26 @@ const blogsRouter = require("express").Router();
 const Blog = require("../models/blog");
 
 //GET
-blogsRouter.get("/", (req, res) => {
-  Blog.find({}).then((blogs) => {
-    res.json(blogs);
-  });
+blogsRouter.get("/", async (req, res) => {
+  const blogs = await Blog.find({});
+  res.json(blogs);
 });
-blogsRouter.get("/:id", (req, res, next) => {
+blogsRouter.get("/:id", async (req, res, next) => {
   const { id } = req.params;
-  Blog.findById(id)
-    .then((blog) => {
-      if (blog) {
-        res.json(blog);
-      } else {
-        res.status(404).send({ error: "id not found" });
-      }
-    })
-    .catch((error) => next(error));
+  try {
+    const blog = await Blog.findById(id);
+    if (blog) {
+      res.json(blog);
+    } else {
+      res.status(404).end();
+    }
+  } catch (error) {
+    next(error);
+  }
 });
 
 //POST
-blogsRouter.post("/", (req, res, next) => {
+blogsRouter.post("/", async (req, res, next) => {
   const { body } = req;
 
   const blog = new Blog({
@@ -31,16 +31,16 @@ blogsRouter.post("/", (req, res, next) => {
     likes: body.likes,
   });
 
-  blog
-    .save()
-    .then((savedBlog) => {
-      res.json(savedBlog);
-    })
-    .catch((error) => next(error));
+  try {
+    const savedBlog = await blog.save({ validateBeforeSave: true });
+    res.status(201).json(savedBlog);
+  } catch (error) {
+    next(error);
+  }
 });
 
 //PUT
-blogsRouter.put("/:id", (req, res, next) => {
+blogsRouter.put("/:id", async (req, res, next) => {
   const { id } = req.params;
   const { body } = req;
 
@@ -51,25 +51,24 @@ blogsRouter.put("/:id", (req, res, next) => {
     likes: body.likes,
   };
 
-  Blog.findByIdAndUpdate(id, note, { new: true })
-    .then((updatedBlog) => {
-      res.json(updatedBlog);
-    })
-    .catch((error) => next(error));
+  try {
+    const updatedBlog = await Blog.findByIdAndUpdate(id, note, { new: true });
+    res.status(200).json(updatedBlog);
+  } catch (error) {
+    next(error);
+  }
 });
 
 //DELETE
-blogsRouter.delete("/:id", (req, res, next) => {
+blogsRouter.delete("/:id", async (req, res, next) => {
   const { id } = req.params;
-  Blog.findByIdAndDelete(id)
-    .then((result) => {
-      if (result === null) {
-        res.status(404).send({ error: "id not found" });
-      } else {
-        res.status(204).end();
-      }
-    })
-    .catch((error) => next(error));
+
+  try {
+    await Blog.findByIdAndDelete(id);
+    res.status(204).end();
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = blogsRouter;
