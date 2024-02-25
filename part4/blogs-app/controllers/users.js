@@ -92,5 +92,12 @@ usersRouter.delete("/:id", async (req, res, next) => {
     next(error);
   }
 });
-
+usersRouter.delete("/", async (req, res, next) => {
+  try {
+    await User.deleteMany({});
+    return res.status(204).end();
+  } catch (error) {
+    next(error);
+  }
+});
 module.exports = usersRouter;
