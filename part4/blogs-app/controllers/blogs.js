@@ -20,7 +20,10 @@ blogsRouter.get("/", async (req, res) => {
 blogsRouter.get("/:id", async (req, res, next) => {
   const { id } = req.params;
   try {
-    const blog = await Blog.findById(id);
+    const blog = await Blog.findById(id).populate("user", {
+      username: 1,
+      name: 1,
+    });
     if (blog) {
       res.json(blog);
     } else {
@@ -34,14 +37,11 @@ blogsRouter.get("/:id", async (req, res, next) => {
 //POST
 blogsRouter.post("/", async (req, res, next) => {
   const { body } = req;
-  const usersList = await User.find({});
-  const randomNumber = Math.floor(Math.random() * usersList.length);
-
-  /* const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET);
+  const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET);
   if (!decodedToken.id) {
     return res.status(401).json({ error: "invalid token" });
-  } */
-  const user = usersList[randomNumber];
+  }
+  const user = await User.findById(decodedToken.id);
 
   const blog = new Blog({
     title: body.title,
