@@ -1,7 +1,6 @@
 const blogsRouter = require("express").Router();
-const jwt = require("jsonwebtoken");
 const Blog = require("../models/blog");
-const User = require("../models/users");
+const { userExtractor } = require("../utils/middleware");
 
 //GET
 blogsRouter.get("/", async (req, res) => {
@@ -26,11 +25,8 @@ blogsRouter.get("/:id", async (req, res, next) => {
 });
 
 //POST
-blogsRouter.post("/", async (req, res, next) => {
-  const { body, token } = req;
-
-  const decodedToken = jwt.verify(token, process.env.SECRET);
-  const user = await User.findById(decodedToken.id);
+blogsRouter.post("/", userExtractor, async (req, res, next) => {
+  const { body, user } = req;
 
   const blog = new Blog({
     title: body.title,
@@ -51,9 +47,9 @@ blogsRouter.post("/", async (req, res, next) => {
 });
 
 //PUT
-blogsRouter.put("/:id", async (req, res, next) => {
+blogsRouter.put("/:id", userExtractor, async (req, res, next) => {
   const { id } = req.params;
-  const { body } = req;
+  const { body, user } = req;
 
   const note = {
     title: body.title,
@@ -63,26 +59,42 @@ blogsRouter.put("/:id", async (req, res, next) => {
   };
 
   try {
-    const updatedBlog = await Blog.findByIdAndUpdate(id, note, { new: true });
-    if (!updatedBlog) {
+    const blog = await Blog.findById(id);
+    if (!blog) {
       return res.status(404).send({ error: "blog id not found" });
-    }
-    res.status(200).json(updatedBlog);
+    } else if (blog.user.toString() === user.id.toString()) {
+      const updatedBlog = await Blog.findByIdAndUpdate(id, note, { new: true });
+      res.status(200).json(updatedBlog);
+    } else if (blog.user.toString() !== user.id.toString()) {
+      return res.status(401).send({ error: "wrong authentication" });
+    } /* 
+
+    const updatedBlog =
+    if (!updatedBlog) {
+    } */
   } catch (error) {
     next(error);
   }
 });
 
 //DELETE
-blogsRouter.delete("/:id", async (req, res, next) => {
+blogsRouter.delete("/:id", userExtractor, async (req, res, next) => {
   const { id } = req.params;
+  const { user } = req;
 
   try {
-    const deletedBlog = await Blog.findByIdAndDelete(id);
-    if (!deletedBlog) {
-      return res.status(404).send({ error: "blog id not found" });
+    const blog = await Blog.findById(id);
+
+    if (blog.user.toString() === user.id.toString()) {
+      user.blogs = user.blogs
+        .map((b) => b.toString())
+        .filter((b) => b !== blog._id.toString());
+      await user.save();
+      await Blog.findByIdAndDelete(id);
+      res.status(204).send({ message: "blog deleted succesfully" });
+    } else if (blog.user.toString() !== user.id.toString()) {
+      return res.status(401).send({ error: "wrong authentication" });
     }
-    res.status(204).end();
   } catch (error) {
     next(error);
   }

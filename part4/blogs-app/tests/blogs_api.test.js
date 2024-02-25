@@ -6,10 +6,22 @@ const api = supertest(app);
 
 const Blog = require("../models/blog");
 
+//Sript
+//npm test -- tests/blogs_api.test.js
+
+let loggedInToken = "";
+
 beforeEach(async () => {
   await Blog.deleteMany({});
   const blogObjects = helper.initialBlogs.map((blog) => new Blog(blog));
   const promiseArray = blogObjects.map((blog) => blog.save());
+  await api
+    .post("/api/user")
+    .send({ username: "test", name: "test1", password: "sanpotitoultra" });
+  const result = await api
+    .post("/api/login")
+    .send({ username: "test", password: "sanpotitoultra" });
+  loggedInToken = result._body.token;
   await Promise.all(promiseArray);
 });
 
@@ -57,6 +69,7 @@ describe("POST Request", () => {
 
     await api
       .post("/api/blogs")
+      .auth(loggedInToken, { type: "bearer" })
       .send(newBlog)
       .expect(201)
       .expect("Content-Type", /application\/json/);
@@ -79,7 +92,10 @@ describe("POST Request", () => {
       title: "this blog is missing the likes prop.",
       url: "www.cosi.it/asd",
     };
-    await api.post("/api/blogs").send(newBlog);
+    await api
+      .post("/api/blogs")
+      .auth(loggedInToken, { type: "bearer" })
+      .send(newBlog);
 
     const blogsAtEnd = await helper.blogsInDb();
     const lastBlog = blogsAtEnd[blogsAtEnd.length - 1];
@@ -90,14 +106,22 @@ describe("POST Request", () => {
     const newBlog = {
       likes: 1,
     };
-    await api.post("/api/blogs").send(newBlog).expect(400);
+    await api
+      .post("/api/blogs")
+      .auth(loggedInToken, { type: "bearer" })
+      .send(newBlog)
+      .expect(400);
   });
-  test("blog without content is not added", async () => {
+  test("a blog without content is not added", async () => {
     const newBlog = {
       likes: 4,
     };
 
-    await api.post("/api/blogs").send(newBlog).expect(400);
+    await api
+      .post("/api/blogs")
+      .auth(loggedInToken, { type: "bearer" })
+      .send(newBlog)
+      .expect(400);
 
     const blogsAtEnd = await helper.blogsInDb();
 
@@ -117,15 +141,28 @@ describe("PUT request", () => {
 });
 describe("DELETE request", () => {
   test("a blog can be deleted", async () => {
-    const blogsAtStart = await helper.blogsInDb();
-    const blogToDelete = blogsAtStart[0];
+    const blogToDelete = {
+      title: "blog to be deleted",
+      author: "test",
+      url: "www.test.it/1",
+      likes: 200,
+    };
+    const result = await api
+      .post("/api/blogs")
+      .auth(loggedInToken, { type: "bearer" })
+      .send(blogToDelete);
 
-    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+    const blogsAtStart = await api.get("/api/blogs");
 
-    const blogsAtEnd = await helper.blogsInDb();
-    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1);
+    await api
+      .delete(`/api/blogs/${result._body.id}`)
+      .auth(loggedInToken, { type: "bearer" })
+      .expect(204);
 
-    const titles = blogsAtEnd.map((b) => b.title);
+    const blogsAtEnd = await api.get("/api/blogs");
+    expect(blogsAtEnd._body).toHaveLength(blogsAtStart._body.length - 1);
+
+    const titles = blogsAtEnd._body.map((b) => b.title);
     expect(titles).not.toContain(blogToDelete.title);
   });
 });
