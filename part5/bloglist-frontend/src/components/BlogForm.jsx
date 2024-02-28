@@ -2,7 +2,7 @@ import { useState } from "react";
 import blogService from "../services/blogs";
 
 const BlogForm = ({
-  blogs,
+  user,
   handleNewBlog,
   handleNotificationMessage,
   handleErrorMessage,
@@ -28,7 +28,8 @@ const BlogForm = ({
         handleErrorMessage(null);
       }, 5000);
     } else if (!result.name) {
-      handleNewBlog([...blogs, result]);
+      const blogsFromDB = await blogService.getAll(user);
+      handleNewBlog(blogsFromDB);
       handleNotificationMessage(
         `a new blog with title :${result.title} by ${result.author} has been added`
       );

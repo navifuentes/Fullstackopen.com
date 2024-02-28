@@ -24,15 +24,13 @@ const App = () => {
   }, []);
   //GET USERS'S BLOGS FROM API
   useEffect(() => {
-    const getBlogsReq = async (u) => {
-      user
-        ? await blogService.getAll(u).then((blogs) => setBlogs(blogs))
-        : null;
-    };
-    getBlogsReq(user);
+    getBlogsInDB(user);
   }, [user]);
 
   //FUNCTIONS
+  const getBlogsInDB = async (u) => {
+    user ? await blogService.getAll(u).then((blogs) => setBlogs(blogs)) : null;
+  };
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -71,7 +69,6 @@ const App = () => {
   return (
     <div>
       {user === null ? (
-        
         <LoginForm
           username={username}
           password={password}

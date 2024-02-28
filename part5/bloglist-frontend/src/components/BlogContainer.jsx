@@ -28,7 +28,7 @@ const BlogContainer = ({ user, blogs, handleNewBlog, handleLogout }) => {
 
       <Togglable>
         <BlogForm
-          blogs={blogs}
+          user={user}
           handleNewBlog={handleNewBlog}
           handleNotificationMessage={handleNotificationMessage}
           handleErrorMessage={handleErrorMessage}
