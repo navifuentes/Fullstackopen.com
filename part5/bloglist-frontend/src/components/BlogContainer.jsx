@@ -3,9 +3,14 @@ import Blog from "./Blog";
 import BlogForm from "./BlogForm";
 import Notification from "./messages/NotificationMessage";
 import Error from "./messages/ErrorMessage";
-import Togglable from "./Togglable";
 
-const BlogContainer = ({ user, blogs, handleNewBlog, handleLogout }) => {
+const BlogContainer = ({
+  user,
+  blogs,
+  handleNewBlog,
+  handleLogout,
+  getBlogsInDB,
+}) => {
   const [notificationMessage, setNotificationMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
 
@@ -26,18 +31,22 @@ const BlogContainer = ({ user, blogs, handleNewBlog, handleLogout }) => {
         {user.name} logged in <button onClick={handleLogout}>logout</button>
       </p>
 
-      <Togglable>
-        <BlogForm
-          user={user}
-          handleNewBlog={handleNewBlog}
-          handleNotificationMessage={handleNotificationMessage}
-          handleErrorMessage={handleErrorMessage}
-        />
-      </Togglable>
+      <BlogForm
+        user={user}
+        handleNewBlog={handleNewBlog}
+        handleNotificationMessage={handleNotificationMessage}
+        handleErrorMessage={handleErrorMessage}
+      />
+
       <br />
 
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
+        <Blog
+          key={blog.id}
+          user={user}
+          blog={blog}
+          getBlogsInDB={getBlogsInDB}
+        />
       ))}
     </>
   );

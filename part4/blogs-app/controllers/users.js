@@ -67,6 +67,7 @@ usersRouter.put("/:id", async (req, res, next) => {
   const user = {
     username: body.username,
     name: body.name,
+    blogs: body.blogs,
   };
   try {
     const updatedUser = await User.findByIdAndUpdate(id, user, { new: true });

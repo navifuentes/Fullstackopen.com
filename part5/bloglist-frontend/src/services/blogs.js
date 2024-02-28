@@ -26,13 +26,20 @@ const create = async (newObject) => {
     const response = await axios.post(baseUrl, newObject, config);
     return response.data;
   } catch (error) {
-    return error
+    return error;
   }
 };
 
 const update = (id, newObject) => {
-  const request = axios.put(`${baseUrl}/${id}`, newObject);
-  return request.then((response) => response.data);
+  try {
+    const config = {
+      headers: { Authorization: token },
+    };
+    const request = axios.put(`${baseUrl}/${id}`, newObject, config);
+    return request.then((response) => response.data);
+  } catch (error) {
+    return error;
+  }
 };
 
 export default { getAll, create, update, setToken };

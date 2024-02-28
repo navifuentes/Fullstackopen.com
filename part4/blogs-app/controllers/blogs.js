@@ -7,7 +7,10 @@ blogsRouter.get("/", userExtractor, async (req, res, next) => {
   const { user } = req;
   console.log(user);
 
-  const blogs = await Blog.find({user: user._id}).populate("user", { username: 1, name: 1 });
+  const blogs = await Blog.find({ user: user._id }).populate("user", {
+    username: 1,
+    name: 1,
+  });
   res.json(blogs);
 });
 blogsRouter.get("/:id", async (req, res, next) => {
@@ -54,7 +57,7 @@ blogsRouter.put("/:id", userExtractor, async (req, res, next) => {
   const { id } = req.params;
   const { body, user } = req;
 
-  const note = {
+  const newBlog = {
     title: body.title,
     author: body.author,
     url: body.url,
@@ -66,15 +69,13 @@ blogsRouter.put("/:id", userExtractor, async (req, res, next) => {
     if (!blog) {
       return res.status(404).send({ error: "blog id not found" });
     } else if (blog.user.toString() === user.id.toString()) {
-      const updatedBlog = await Blog.findByIdAndUpdate(id, note, { new: true });
+      const updatedBlog = await Blog.findByIdAndUpdate(id, newBlog, {
+        new: true,
+      });
       res.status(200).json(updatedBlog);
     } else if (blog.user.toString() !== user.id.toString()) {
       return res.status(401).send({ error: "wrong authentication" });
-    } /* 
-
-    const updatedBlog =
-    if (!updatedBlog) {
-    } */
+    }
   } catch (error) {
     next(error);
   }
