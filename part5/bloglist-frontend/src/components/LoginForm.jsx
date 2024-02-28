@@ -1,13 +1,19 @@
+import Error from "./messages/ErrorMessage";
+
 const LoginForm = ({
   username,
   password,
   handleUsernameChange,
   handlePasswordChange,
   handleSubmit,
+
+  errorMessage,
 }) => {
   return (
     <>
       <h2>Log in to application</h2>
+      <Error message={errorMessage} />
+
       <form onSubmit={handleSubmit}>
         <div>
           username

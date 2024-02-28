@@ -1,7 +1,12 @@
 import { useState } from "react";
 import blogService from "../services/blogs";
 
-const BlogForm = ({ blogs, handleNewBlog }) => {
+const BlogForm = ({
+  blogs,
+  handleNewBlog,
+  handleNotificationMessage,
+  handleErrorMessage,
+}) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
@@ -17,7 +22,20 @@ const BlogForm = ({ blogs, handleNewBlog }) => {
     setAuthor("");
     setUrl("");
     const result = await blogService.create(newBlog);
-    handleNewBlog([...blogs, result]);
+    if (result.name === "AxiosError") {
+      handleErrorMessage("Invalid fields value");
+      setTimeout(() => {
+        handleErrorMessage(null);
+      }, 5000);
+    } else if (!result.name) {
+      handleNewBlog([...blogs, result]);
+      handleNotificationMessage(
+        `a new blog with title :${result.title} by ${result.author} has been added`
+      );
+      setTimeout(() => {
+        handleNotificationMessage(null);
+      }, 5000);
+    }
   };
 
   return (

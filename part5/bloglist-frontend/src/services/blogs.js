@@ -19,11 +19,15 @@ const getAll = async (u) => {
 };
 
 const create = async (newObject) => {
-  const config = {
-    headers: { Authorization: token },
-  };
-  const response = await axios.post(baseUrl, newObject, config);
-  return response.data;
+  try {
+    const config = {
+      headers: { Authorization: token },
+    };
+    const response = await axios.post(baseUrl, newObject, config);
+    return response.data;
+  } catch (error) {
+    return error
+  }
 };
 
 const update = (id, newObject) => {

@@ -46,6 +46,10 @@ const App = () => {
       setUser(user);
       setUsername("");
       setPassword("");
+      setNotificationMessage(`Welcome  ${user.name}`);
+      setTimeout(() => {
+        setNotificationMessage(null);
+      }, 5000);
     } catch (exception) {
       console.log("exception", exception);
       setErrorMessage("Wrong credentials");
@@ -67,12 +71,14 @@ const App = () => {
   return (
     <div>
       {user === null ? (
+        
         <LoginForm
           username={username}
           password={password}
           handleUsernameChange={({ target }) => setUsername(target.value)}
           handlePasswordChange={({ target }) => setPassword(target.value)}
           handleSubmit={handleLogin}
+          errorMessage={errorMessage}
         />
       ) : (
         <BlogContainer
