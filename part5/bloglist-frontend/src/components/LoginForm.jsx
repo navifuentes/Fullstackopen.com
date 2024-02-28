@@ -1,4 +1,5 @@
 import Error from "./messages/ErrorMessage";
+import PropTypes from "prop-types";
 
 const LoginForm = ({
   username,
@@ -6,7 +7,6 @@ const LoginForm = ({
   handleUsernameChange,
   handlePasswordChange,
   handleSubmit,
-
   errorMessage,
 }) => {
   return (
@@ -37,6 +37,13 @@ const LoginForm = ({
       </form>
     </>
   );
+};
+LoginForm.propTypes = {
+  username: PropTypes.string.isRequired,
+  password: PropTypes.string.isRequired,
+  handleUsernameChange: PropTypes.func.isRequired,
+  handlePasswordChange: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
 };
 
 export default LoginForm;

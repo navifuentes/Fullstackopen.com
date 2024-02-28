@@ -1,6 +1,6 @@
-import { useState, forwardRef, useImperativeHandle } from "react";
+import { React, useState, useImperativeHandle } from "react";
 
-const Togglable = forwardRef(({ children }, refs) => {
+const Togglable = React.forwardRef(({ children }, refs) => {
   const [visible, setVisible] = useState(false);
 
   const hideWhenVisible = { display: visible ? "none" : "" };
@@ -28,4 +28,6 @@ const Togglable = forwardRef(({ children }, refs) => {
     </>
   );
 });
+
+Togglable.displayName = "Togglable";
 export default Togglable;
