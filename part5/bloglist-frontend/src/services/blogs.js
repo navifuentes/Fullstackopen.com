@@ -26,7 +26,7 @@ const create = async (newObject) => {
     const response = await axios.post(baseUrl, newObject, config);
     return response.data;
   } catch (error) {
-    return error;
+    console.log(error);
   }
 };
 
@@ -38,8 +38,19 @@ const update = (id, newObject) => {
     const request = axios.put(`${baseUrl}/${id}`, newObject, config);
     return request.then((response) => response.data);
   } catch (error) {
-    return error;
+    console.log(error);
+  }
+};
+const remove = (id) => {
+  try {
+    const config = {
+      headers: { Authorization: token },
+    };
+    const request = axios.delete(`${baseUrl}/${id}`, config);
+    return request.then((response) => response.data);
+  } catch (error) {
+    console.log(error);
   }
 };
 
-export default { getAll, create, update, setToken };
+export default { getAll, create, update, remove, setToken };

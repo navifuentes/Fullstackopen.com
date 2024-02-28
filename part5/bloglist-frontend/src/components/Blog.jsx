@@ -22,6 +22,12 @@ const Blog = ({ blog, user, getBlogsInDB }) => {
     await getBlogsInDB(user);
     console.log(result);
   };
+  const deleteBlogToDB = async (b) => {
+    window.confirm(`Remove ${b.title} by ${b.author}`)
+      ? await blogService.remove(blog.id)
+      : null;
+    await getBlogsInDB(user);
+  };
 
   return (
     <div className="blog">
@@ -32,6 +38,10 @@ const Blog = ({ blog, user, getBlogsInDB }) => {
         {blog.likes} <button onClick={() => updateBlog()}>Like</button>
         <br />
         {blog.user.name}
+        <br />
+        <br />
+        <button onClick={() => deleteBlogToDB(blog)}>remove</button>
+        <br />
       </Togglable>
     </div>
   );

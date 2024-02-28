@@ -40,14 +40,16 @@ const BlogContainer = ({
 
       <br />
 
-      {blogs.map((blog) => (
-        <Blog
-          key={blog.id}
-          user={user}
-          blog={blog}
-          getBlogsInDB={getBlogsInDB}
-        />
-      ))}
+      {blogs
+        .sort((a, b) => b.likes - a.likes)
+        .map((blog) => (
+          <Blog
+            key={blog.id}
+            user={user}
+            blog={blog}
+            getBlogsInDB={getBlogsInDB}
+          />
+        ))}
     </>
   );
 };

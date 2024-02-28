@@ -24,6 +24,7 @@ const App = () => {
   }, []);
   //GET USERS'S BLOGS FROM API
   useEffect(() => {
+    console.log("effect");
     getBlogsInDB(user);
   }, [user]);
 
@@ -57,6 +58,9 @@ const App = () => {
     window.localStorage.removeItem("loggedBlogappUser");
     setUser(null);
   };
+  const handleNewBlog = (b) => {
+    setBlogs(b);
+  };
 
   //RETURN
   return (
@@ -71,7 +75,13 @@ const App = () => {
           errorMessage={errorMessage}
         />
       ) : (
-        <BlogContainer user={user} blogs={blogs} handleLogout={handleLogout} getBlogsInDB={getBlogsInDB} />
+        <BlogContainer
+          user={user}
+          blogs={blogs}
+          handleNewBlog={handleNewBlog}
+          handleLogout={handleLogout}
+          getBlogsInDB={getBlogsInDB}
+        />
       )}
     </div>
   );
