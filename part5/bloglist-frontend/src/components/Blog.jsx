@@ -1,26 +1,13 @@
-import { useEffect, useState } from "react";
 import Togglable from "./Togglable";
 import blogService from "../services/blogs";
 
-const Blog = ({ blog, user, getBlogsInDB }) => {
-  const [updatedBlog, setUpdatedBlog] = useState({});
-
-  useEffect(() => {
-    updateBlogToDB(updateBlog);
-  }, [updatedBlog]);
-
+const Blog = ({ blog, user, getBlogsInDB, handleUpdateBlog }) => {
   const updateBlog = async () => {
-    setUpdatedBlog({
+    const updatedBlog = {
       ...blog,
       likes: blog.likes + 1,
-    });
-    //setBlogsLikes(blogsLikes + 1);
-    console.log("updateBlog", updatedBlog);
-  };
-  const updateBlogToDB = async (b) => {
-    const result = await blogService.update(blog.id, updatedBlog);
-    await getBlogsInDB(user);
-    console.log(result);
+    };
+    await handleUpdateBlog(updatedBlog);
   };
   const deleteBlogToDB = async (b) => {
     window.confirm(`Remove ${b.title} by ${b.author}`)
@@ -33,15 +20,17 @@ const Blog = ({ blog, user, getBlogsInDB }) => {
     <div className="blog">
       {blog.title} {blog.author}
       <Togglable>
-        {blog.url}
-        <br />
-        {blog.likes} <button onClick={() => updateBlog()}>Like</button>
-        <br />
-        {blog.user.name}
-        <br />
-        <br />
-        <button onClick={() => deleteBlogToDB(blog)}>remove</button>
-        <br />
+        <div id="url">{blog.url}</div>
+        <div id="likes">{blog.likes}</div>{" "}
+        <div>
+          <button className="likeButton" onClick={() => updateBlog()}>
+            Like
+          </button>
+        </div>
+        <div>{blog.user.name}</div>
+        <div>
+          <button onClick={() => deleteBlogToDB(blog)}>remove</button>
+        </div>
       </Togglable>
     </div>
   );

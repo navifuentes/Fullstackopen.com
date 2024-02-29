@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 import blogService from "./services/blogs";
 import loginService from "./services/login";
-import LoginForm from "./components/LoginForm";
+import LoginForm from "./components/forms/LoginForm";
 import BlogContainer from "./components/BlogContainer";
 
 const App = () => {
@@ -30,7 +30,7 @@ const App = () => {
 
   //FUNCTIONS
   const getBlogsInDB = async (u) => {
-    user ? await blogService.getAll(u).then((blogs) => setBlogs(blogs)) : null;
+    user ? setBlogs(await blogService.getAll(u)) : null;
   };
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -58,8 +58,13 @@ const App = () => {
     window.localStorage.removeItem("loggedBlogappUser");
     setUser(null);
   };
-  const handleNewBlog = (b) => {
-    setBlogs(b);
+  const handleNewBlog = async (b) => {
+    await blogService.create(b);
+    await getBlogsInDB(user);
+  };
+  const handleUpdateBlog = async (updatedBlog) => {
+    await blogService.update(updatedBlog.id, updatedBlog);
+    await getBlogsInDB(user);
   };
 
   //RETURN
@@ -81,6 +86,7 @@ const App = () => {
           handleNewBlog={handleNewBlog}
           handleLogout={handleLogout}
           getBlogsInDB={getBlogsInDB}
+          handleUpdateBlog={handleUpdateBlog}
         />
       )}
     </div>

@@ -1,13 +1,7 @@
 import { useState, useRef } from "react";
-import blogService from "../services/blogs";
-import Togglable from "./Togglable";
+import Togglable from "../Togglable";
 
-const BlogForm = ({
-  user,
-  handleNewBlog,
-  handleNotificationMessage,
-  handleErrorMessage,
-}) => {
+const BlogForm = ({ handleNewBlog }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
@@ -24,22 +18,7 @@ const BlogForm = ({
     setTitle("");
     setAuthor("");
     setUrl("");
-    const result = await blogService.create(newBlog);
-    if (result.name === "AxiosError") {
-      handleErrorMessage("Invalid fields value");
-      setTimeout(() => {
-        handleErrorMessage(null);
-      }, 5000);
-    } else if (!result.name) {
-      const blogsFromDB = await blogService.getAll(user);
-      handleNewBlog(blogsFromDB);
-      handleNotificationMessage(
-        `a new blog with title :${result.title} by ${result.author} has been added`
-      );
-      setTimeout(() => {
-        handleNotificationMessage(null);
-      }, 5000);
-    }
+    await handleNewBlog(newBlog);
   };
 
   return (

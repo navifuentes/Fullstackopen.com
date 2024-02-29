@@ -10,7 +10,7 @@ const setToken = (newToken) => {
 const getAll = async (u) => {
   try {
     const request = await axios.get(baseUrl, {
-      headers: { authorization: "Bearer " + u.token },
+      headers: { authorization: token },
     });
     return request.data;
   } catch (error) {

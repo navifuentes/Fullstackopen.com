@@ -26,7 +26,7 @@ beforeEach(async () => {
 });
 
 describe("GET request", () => {
-  test("all blogs are returned", async () => {
+  test.only("all blogs are returned", async () => {
     const response = await api
       .get("/api/blogs")
       .expect(200)

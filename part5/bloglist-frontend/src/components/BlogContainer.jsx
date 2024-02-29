@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Blog from "./Blog";
-import BlogForm from "./BlogForm";
+import BlogForm from "./forms/BlogForm";
 import Notification from "./messages/NotificationMessage";
 import Error from "./messages/ErrorMessage";
 
@@ -10,6 +10,7 @@ const BlogContainer = ({
   handleNewBlog,
   handleLogout,
   getBlogsInDB,
+  handleUpdateBlog,
 }) => {
   const [notificationMessage, setNotificationMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -48,6 +49,7 @@ const BlogContainer = ({
             user={user}
             blog={blog}
             getBlogsInDB={getBlogsInDB}
+            handleUpdateBlog={handleUpdateBlog}
           />
         ))}
     </>

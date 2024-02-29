@@ -1,4 +1,4 @@
-import Error from "./messages/ErrorMessage";
+import Error from "../messages/ErrorMessage";
 import PropTypes from "prop-types";
 
 const LoginForm = ({
