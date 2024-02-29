@@ -27,6 +27,7 @@ const BlogForm = ({ handleNewBlog }) => {
         <div>
           Title :{" "}
           <input
+            id="title"
             type="text"
             name="title"
             value={title}
@@ -36,6 +37,7 @@ const BlogForm = ({ handleNewBlog }) => {
         <div>
           Author :{" "}
           <input
+            id="author"
             type="text"
             name="author"
             value={author}
@@ -45,13 +47,16 @@ const BlogForm = ({ handleNewBlog }) => {
         <div>
           url :{" "}
           <input
+            id="url"
             type="text"
             name="url"
             value={url}
             onChange={({ target }) => setUrl(target.value)}
           />
         </div>
-        <button type="submit">create</button>
+        <button id="create-button" type="submit">
+          create
+        </button>
       </form>
     </Togglable>
   );

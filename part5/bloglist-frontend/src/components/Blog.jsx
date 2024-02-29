@@ -28,9 +28,12 @@ const Blog = ({ blog, user, getBlogsInDB, handleUpdateBlog }) => {
           </button>
         </div>
         <div>{blog.user.name}</div>
-        <div>
-          <button onClick={() => deleteBlogToDB(blog)}>remove</button>
-        </div>
+        {user.username === blog.user.username ? <div>
+          <button id="remove-button" onClick={() => deleteBlogToDB(blog)}>
+            remove
+          </button>
+        </div> : null}
+        
       </Togglable>
     </div>
   );

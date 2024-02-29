@@ -29,7 +29,7 @@ const BlogContainer = ({
       <Error message={errorMessage} />
 
       <p>
-        {user.name} logged in <button onClick={handleLogout}>logout</button>
+        {user.name} logged in <button id="logout-button" onClick={handleLogout}>log out</button>
       </p>
 
       <BlogForm
