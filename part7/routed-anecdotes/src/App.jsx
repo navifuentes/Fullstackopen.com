@@ -42,7 +42,7 @@ const AnecdoteList = ({ anecdotes }) => (
 const Anecdote = ({ anecdotes }) => {
   const id = useParams().id;
   const anecdote = anecdotes.find((a) => a.id === Number(id));
-  const { content, author, votes } = anecdote;
+  const { content, author, votes, info } = anecdote;
   const padding = {
     paddingBottom: 15,
   };
@@ -52,6 +52,9 @@ const Anecdote = ({ anecdotes }) => {
         {content} by {author}
       </h2>
       <div style={padding}>has {votes} votes</div>
+      <div style={padding}>
+        for more info see <a href={`${info}`}>{info}</a>
+      </div>
     </div>
   );
 };
@@ -191,9 +194,6 @@ const App = () => {
         />
         <Route path="/create" element={<CreateNew addNew={addNew} />} />
         <Route path="/about" element={<About />} />
-        {/* <AnecdoteList anecdotes={anecdotes} />
-        <About />
-        <CreateNew addNew={addNew} /> */}
       </Routes>
       <Footer />
     </Router>
