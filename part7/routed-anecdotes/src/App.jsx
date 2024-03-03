@@ -17,7 +17,7 @@ const Menu = () => {
         anecdotes
       </Link>
       <Link style={padding} to={"/create"}>
-        crate
+        create
       </Link>
       <Link style={padding} to={"/about"}>
         about
@@ -38,6 +38,7 @@ const AnecdoteList = ({ anecdotes }) => (
     </ul>
   </div>
 );
+
 const Anecdote = ({ anecdotes }) => {
   const id = useParams().id;
   const anecdote = anecdotes.find((a) => a.id === Number(id));
@@ -188,8 +189,8 @@ const App = () => {
           path="/anecdotes/:id"
           element={<Anecdote anecdotes={anecdotes} />}
         />
-        <Route path="/create" element={<About />} />
-        <Route path="/about" element={<CreateNew addNew={addNew} />} />
+        <Route path="/create" element={<CreateNew addNew={addNew} />} />
+        <Route path="/about" element={<About />} />
         {/* <AnecdoteList anecdotes={anecdotes} />
         <About />
         <CreateNew addNew={addNew} /> */}
