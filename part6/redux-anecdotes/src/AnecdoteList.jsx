@@ -1,4 +1,5 @@
 import React from "react";
+import anecdoteService from "./services/anecdotes";
 import { useSelector, useDispatch } from "react-redux";
 import anecdoteReducer, { voteAnecdote } from "./reducers/anecdoteReducer";
 import notificationReducer, {
@@ -7,6 +8,8 @@ import notificationReducer, {
 } from "./reducers/notificationReducer";
 
 const AnecdoteList = () => {
+  const dispatch = useDispatch();
+
   const filterContent = (array, filter) => {
     const lowerCaseFilter = filter.toLowerCase();
     return array.filter((a) =>
@@ -18,11 +21,8 @@ const AnecdoteList = () => {
     const sorted = [...anecdotes].sort((a, b) => b.votes - a.votes);
     return filter === "" ? sorted : filterContent(sorted, filter);
   });
-  const handleVote = (anecdote) => {
-    dispatch({
-      type: "anecdotes/voteAnecdote",
-      payload: anecdote.id,
-    });
+  const handleVote = async (anecdote) => {
+    dispatch(voteAnecdote(anecdote.id));
     dispatch({
       type: "notification/setNotification",
       payload: `you voted : ${anecdote.content}`,
@@ -35,7 +35,6 @@ const AnecdoteList = () => {
     }, 5000);
   };
 
-  const dispatch = useDispatch();
   return (
     <>
       {anecdotesList.map((anecdote) => (
