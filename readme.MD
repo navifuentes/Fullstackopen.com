@@ -145,3 +145,66 @@
     error: 'token expired'
   })
 }`
+
+# Part 5 | Cypress: e2e test
+
+- para instalar la version de Cypress que me funciono:
+
+  `npm i cypress@12.10.0`
+
+- configurar para que se conecte e2e en 'cypress.config.js'
+
+  `import { defineConfig } from "cypress";
+
+export default defineConfig({
+e2e: {
+setupNodeEvents(on, config) {
+// implement node event listeners here
+},
+baseUrl: "http://localhost:5173",
+env: {
+BACKEND: "http://localhost:3001/api",
+},
+},
+});
+`
+
+- archivo ".babelrc" en el directorio raíz:
+
+`{
+  "presets": [
+    "@babel/preset-env",
+    ["@babel/preset-react", { "runtime": "automatic" }]
+  ]
+}`
+
+- en el package.json añadimos:
+
+`"devDependecias":{
+  //....
+},
+"jest":{
+  "testEnviroment":"jsdom"
+}
+`
+
+- añadir los scripts; para correr el frontend:
+
+`"dev": "vite --host",`
+
+- para abrir la app:
+
+`"cypress:open": "cypress open",`
+
+- para correr cypress en la consola:
+
+`"test:e2e": "cypress run"`
+
+# Part 6 | Redux, React Query, React redux ...
+
+- dependencies:
+
+  > @reduxjs/toolkit
+  > @testing-library/jest-dom
+  > @testing-library/react
+  > @testing-library/user-event
