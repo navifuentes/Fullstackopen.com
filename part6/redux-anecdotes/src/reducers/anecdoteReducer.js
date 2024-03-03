@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-
+/* 
 const anecdotesAtStart = {
   anecdotes: [
     "If it hurts, do it more often",
@@ -23,10 +23,10 @@ const asObject = (anecdote) => {
 };
 
 const initialState = anecdotesAtStart.anecdotes.map(asObject);
-
+ */
 const anecdoteSlice = createSlice({
   name: "anecdotes",
-  initialState,
+  initialState: [],
   reducers: {
     createAnecdote(state, action) {
       const content = action.payload;
@@ -45,8 +45,15 @@ const anecdoteSlice = createSlice({
       };
       return state.map((a) => (a.id !== id ? a : changedAnecdote));
     },
+    appendAnecdote(state, action) {
+      state.push(action.payload);
+    },
+    setAnecdotes(state, action) {
+      return action.payload;
+    },
   },
 });
 
-export const { createAnecdote, voteAnecdote } = anecdoteSlice.actions;
+export const { createAnecdote, voteAnecdote, appendAnecdote, setAnecdotes } =
+  anecdoteSlice.actions;
 export default anecdoteSlice.reducer;
