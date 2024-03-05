@@ -7,7 +7,7 @@ const BlogForm = ({ handleNewBlog }) => {
   const [url, setUrl] = useState("");
   const blogFormRef = useRef();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     blogFormRef.current.toggleVisibility();
     const newBlog = {
@@ -18,7 +18,7 @@ const BlogForm = ({ handleNewBlog }) => {
     setTitle("");
     setAuthor("");
     setUrl("");
-    await handleNewBlog(newBlog);
+    handleNewBlog(newBlog);
   };
 
   return (

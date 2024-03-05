@@ -3,14 +3,17 @@ import BlogForm from "./forms/BlogForm";
 import Notification from "./messages/NotificationMessage";
 import Error from "./messages/ErrorMessage";
 
+import { useSelector } from "react-redux";
+
 const BlogContainer = ({
   user,
-  blogs,
   handleNewBlog,
   handleLogout,
-  getBlogsInDB,
   handleUpdateBlog,
+  handleDeleteBlog,
 }) => {
+  const blogs = useSelector((state) => state.blogs);
+
   return (
     <>
       <h2>Blogs</h2>
@@ -28,15 +31,15 @@ const BlogContainer = ({
 
       <br />
 
-      {blogs
+      {[...blogs]
         .sort((a, b) => b.likes - a.likes)
         .map((blog) => (
           <Blog
             key={blog.id}
             user={user}
             blog={blog}
-            getBlogsInDB={getBlogsInDB}
             handleUpdateBlog={handleUpdateBlog}
+            handleDeleteBlog={handleDeleteBlog}
           />
         ))}
     </>
