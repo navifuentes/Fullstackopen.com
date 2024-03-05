@@ -4,9 +4,9 @@ import Info from "./Info";
 
 const Navbar = ({ user, handleLogout }) => {
   return (
-    <div className="p-1 flex flex-row justify-between border-b-2 border-black">
+    <div className="p-1 flex flex-row justify-between border-b-2 border-black bg-cyan-500">
       <div>
-        <Link className="mx-2 text-2xl" to={"/"}>
+        <Link className="mx-2 text-2xl" to={"/blogs"}>
           Blogs
         </Link>
         <Link className="mx-2 text-2xl" to={"/users"}>

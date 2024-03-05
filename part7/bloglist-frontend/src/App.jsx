@@ -4,12 +4,14 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import blogService from "./services/blogs";
 
 import LoginForm from "./components/login/LoginForm";
+import Navbar from "./components/navbar/Navbar";
+import Title from "./components/titles/title";
+import Error from "./components/messages/ErrorMessage";
+import Notification from "./components/messages/NotificationMessage";
 import BlogContainer from "./components/blogs/BlogContainer";
 import UsersContainer from "./components/users/UsersContainer";
 import User from "./components/users/User";
 import BlogView from "./components/blogs/BlogView";
-import Navbar from "./components/navbar/Navbar";
-import Title from "./components/titles/title";
 
 import { loginUser, setLocalUser } from "./reducers/userReducer";
 import { initializeUsers } from "./reducers/usersReducer";
@@ -47,7 +49,7 @@ const App = () => {
     if (response === undefined) {
       console.log("logging in");
     } else if (response.name === "AxiosError") {
-      dispatch(setError("wrong credentials", 5));
+      dispatch(setError("oops...   wrong credentials!", 5));
     }
   };
   const handleLogout = () => {
@@ -70,6 +72,8 @@ const App = () => {
           <Navbar user={user} handleLogout={handleLogout} />
           <div className="flex flex-col items-center">
             <Title type={"h1"} text={"Blogs"} />
+            <Notification />
+            <Error />
             <Routes>
               <Route
                 path="/"
@@ -95,6 +99,16 @@ const App = () => {
               <Route
                 path="/blogs/:id"
                 element={<BlogView user={user} blogs={blogs} />}
+              />
+              <Route
+                path="/blogs"
+                element={
+                  <BlogContainer
+                    user={user}
+                    blogs={blogs}
+                    handleNewBlog={handleNewBlog}
+                  />
+                }
               />
             </Routes>
           </div>

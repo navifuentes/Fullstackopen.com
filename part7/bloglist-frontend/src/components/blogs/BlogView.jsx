@@ -8,19 +8,22 @@ import {
   deleteOneBlog,
 } from "../../reducers/blogsReducer";
 import { setNotification } from "../../reducers/notificationReducer";
+import { setError } from "../../reducers/errorReducer";
 import { useDispatch } from "react-redux";
 
-import {useField} from "../../hooks/useField";
+import { useField } from "../../hooks/useField";
 
 const BlogView = ({ user, blogs }) => {
   const dispatch = useDispatch();
   const id = useParams().id;
   const blog = blogs.find((b) => b.id === id);
-  const [comment, resetComment] = useField("text")
+  const [comment, resetComment] = useField("text");
 
   const handleDeleteBlog = (blog) => {
-    dispatch(deleteOneBlog(blog));
-    dispatch(setNotification(`you deleted blog : ${blog.title}`, 5));
+    if (window.confirm(`want to delete ${blog.title} ?`)) {
+      dispatch(deleteOneBlog(blog));
+      dispatch(setError(`you deleted blog : ${blog.title}`, 5));
+    }
   };
   const handleUpdateBlog = (blog) => {
     dispatch(updateBlogLikes(blog));
@@ -31,7 +34,7 @@ const BlogView = ({ user, blogs }) => {
     const commentToAdd = {
       comment: comment.value,
     };
-    resetComment()
+    resetComment();
     dispatch(updateBlogComments(blog, commentToAdd));
     dispatch(setNotification(`you commented the blog !`, 5));
   };
