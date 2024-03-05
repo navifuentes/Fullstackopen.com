@@ -5,11 +5,11 @@ import blogService from "./services/blogs";
 
 import LoginForm from "./components/login/LoginForm";
 import BlogContainer from "./components/blogs/BlogContainer";
-import LoginInfo from "./components/login/LoginInfo";
 import UsersContainer from "./components/users/UsersContainer";
 import User from "./components/users/User";
-import Title from "./components/titles/title";
 import BlogView from "./components/blogs/BlogView";
+import Navbar from "./components/navbar/Navbar";
+import Title from "./components/titles/title";
 
 import { loginUser, setLocalUser } from "./reducers/userReducer";
 import { initializeUsers } from "./reducers/usersReducer";
@@ -62,40 +62,42 @@ const App = () => {
 
   //RETURN
   return (
-    <div className="flex flex-col items-center">
+    <div>
       {user === null ? (
         <LoginForm handleSubmit={handleLogin} />
       ) : (
         <Router>
-          <Title type={"h1"} text={"Blogs"} />
-          <LoginInfo user={user} handleLogout={handleLogout} />
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <BlogContainer
-                  user={user}
-                  blogs={blogs}
-                  handleNewBlog={handleNewBlog}
-                />
-              }
-            />
-            <Route
-              path="/users"
-              element={
-                <UsersContainer
-                  user={user}
-                  users={users}
-                  handleLogout={handleLogout}
-                />
-              }
-            />
-            <Route path="/users/:id" element={<User users={users} />} />
-            <Route
-              path="/blogs/:id"
-              element={<BlogView user={user} blogs={blogs} />}
-            />
-          </Routes>
+          <Navbar user={user} handleLogout={handleLogout} />
+          <div className="flex flex-col items-center">
+            <Title type={"h1"} text={"Blogs"} />
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <BlogContainer
+                    user={user}
+                    blogs={blogs}
+                    handleNewBlog={handleNewBlog}
+                  />
+                }
+              />
+              <Route
+                path="/users"
+                element={
+                  <UsersContainer
+                    user={user}
+                    users={users}
+                    handleLogout={handleLogout}
+                  />
+                }
+              />
+              <Route path="/users/:id" element={<User users={users} />} />
+              <Route
+                path="/blogs/:id"
+                element={<BlogView user={user} blogs={blogs} />}
+              />
+            </Routes>
+          </div>
         </Router>
       )}
     </div>

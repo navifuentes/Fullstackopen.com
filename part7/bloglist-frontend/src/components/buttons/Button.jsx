@@ -10,6 +10,15 @@ const Button = ({ type, text, handleClick }) => {
         {text}
       </button>
     );
+  } else if (type === "black") {
+    return (
+      <button
+        className="w-20 py-1 rounded-full bg-black text-white"
+        onClick={handleClick}
+      >
+        {text}
+      </button>
+    );
   }
 
   return (

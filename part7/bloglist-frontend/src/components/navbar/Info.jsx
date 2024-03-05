@@ -3,7 +3,7 @@ import Notification from "../messages/NotificationMessage";
 import Error from "../messages/ErrorMessage";
 import Button from "../buttons/Button";
 
-const infoContainer = ({ user, handleLogout }) => {
+const Info = ({ user, handleLogout }) => {
   return (
     <>
       <Notification />
@@ -12,6 +12,7 @@ const infoContainer = ({ user, handleLogout }) => {
       <p>
         {user.name} logged in{" "}
         <Button
+          type={"black"}
           id="logout-button"
           handleClick={handleLogout}
           text={"log out"}
@@ -21,4 +22,4 @@ const infoContainer = ({ user, handleLogout }) => {
   );
 };
 
-export default infoContainer;
+export default Info;

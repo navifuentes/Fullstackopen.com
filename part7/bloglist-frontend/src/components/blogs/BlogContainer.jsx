@@ -1,11 +1,7 @@
 import BlogForm from "./BlogForm";
 import { Link } from "react-router-dom";
 
-const BlogContainer = ({
-  user,
-  blogs,
-  handleNewBlog,
-}) => {
+const BlogContainer = ({ user, blogs, handleNewBlog }) => {
   return (
     <>
       <BlogForm user={user} handleNewBlog={handleNewBlog} />
