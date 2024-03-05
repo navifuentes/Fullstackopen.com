@@ -1,10 +1,15 @@
 import { useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import blogService from "./services/blogs";
-import LoginForm from "./components/forms/LoginForm";
-import BlogContainer from "./components/BlogContainer";
+
+import LoginForm from "./components/login/LoginForm";
+import BlogContainer from "./components/blogs/BlogContainer";
+import LoginInfo from "./components/login/LoginInfo";
+import UserContainer from "./components/users/UserContainer";
 
 import { loginUser, setLocalUser } from "./reducers/userReducer";
+import { initializeUsers } from "./reducers/usersReducer";
 import {
   initializeBlogs,
   createNewBlog,
@@ -14,10 +19,12 @@ import {
 import { setNotification } from "./reducers/notificationReducer";
 import { setError } from "./reducers/errorReducer";
 import { useSelector, useDispatch } from "react-redux";
+import Title from "./components/titles/title";
 
 const App = () => {
   const dispatch = useDispatch();
   let user = useSelector((state) => state.user);
+  const users = useSelector((state) => state.users);
 
   //EFFECT HOOKS
   //GET USER FROM LOCAL STORAGE
@@ -29,9 +36,10 @@ const App = () => {
       blogService.setToken(user.token);
     }
   }, []);
-  //GET USERS'S BLOGS FROM API
+  //GET DATA FROM API
   useEffect(() => {
     dispatch(initializeBlogs());
+    dispatch(initializeUsers());
   }, []);
 
   //FUNCTIONS
@@ -64,17 +72,37 @@ const App = () => {
 
   //RETURN
   return (
-    <div>
+    <div >
       {user === null ? (
         <LoginForm handleSubmit={handleLogin} />
       ) : (
-        <BlogContainer
-          user={user}
-          handleNewBlog={handleNewBlog}
-          handleLogout={handleLogout}
-          handleUpdateBlog={handleUpdateBlog}
-          handleDeleteBlog={handleDeleteBlog}
-        />
+        <Router>
+          <Title type={"h1"} text={"Blogs"} />
+          <LoginInfo user={user} handleLogout={handleLogout} />
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <BlogContainer
+                  user={user}
+                  handleNewBlog={handleNewBlog}
+                  handleUpdateBlog={handleUpdateBlog}
+                  handleDeleteBlog={handleDeleteBlog}
+                />
+              }
+            />
+            <Route
+              path="/users"
+              element={
+                <UserContainer
+                  user={user}
+                  users={users}
+                  handleLogout={handleLogout}
+                />
+              }
+            />
+          </Routes>
+        </Router>
       )}
     </div>
   );

@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import Togglable from "../Togglable";
+import Togglable from "../reciclables/Togglable";
 
 const BlogForm = ({ handleNewBlog }) => {
   const [title, setTitle] = useState("");

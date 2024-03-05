@@ -5,7 +5,9 @@ import store from "./store";
 import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <Provider store={store}>
-    <App />
-  </Provider>
+  <div className="flex flex-col items-center">
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </div>
 );

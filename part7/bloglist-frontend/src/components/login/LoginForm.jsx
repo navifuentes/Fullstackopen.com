@@ -2,13 +2,7 @@ import Error from "../messages/ErrorMessage";
 import PropTypes from "prop-types";
 import useField from "../../hooks/useField";
 
-const LoginForm = ({
-  // username,
-  // password,
-  // handleUsernameChange,
-  // handlePasswordChange,
-  handleSubmit,
-}) => {
+const LoginForm = ({ handleSubmit }) => {
   const username = useField("text");
   const password = useField("password");
 
@@ -43,10 +37,6 @@ const LoginForm = ({
   );
 };
 LoginForm.propTypes = {
-  /* username: PropTypes.string.isRequired,
-  password: PropTypes.string.isRequired,
-  handleUsernameChange: PropTypes.func.isRequired,
-  handlePasswordChange: PropTypes.func.isRequired, */
   handleSubmit: PropTypes.func.isRequired,
 };
 

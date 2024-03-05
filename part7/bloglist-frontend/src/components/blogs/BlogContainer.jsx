@@ -1,14 +1,12 @@
 import Blog from "./Blog";
-import BlogForm from "./forms/BlogForm";
-import Notification from "./messages/NotificationMessage";
-import Error from "./messages/ErrorMessage";
+import BlogForm from "./BlogForm";
+
 
 import { useSelector } from "react-redux";
 
 const BlogContainer = ({
   user,
   handleNewBlog,
-  handleLogout,
   handleUpdateBlog,
   handleDeleteBlog,
 }) => {
@@ -16,17 +14,6 @@ const BlogContainer = ({
 
   return (
     <>
-      <h2>Blogs</h2>
-      <Notification />
-      <Error />
-
-      <p>
-        {user.name} logged in{" "}
-        <button id="logout-button" onClick={handleLogout}>
-          log out
-        </button>
-      </p>
-
       <BlogForm user={user} handleNewBlog={handleNewBlog} />
 
       <br />

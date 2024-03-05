@@ -1,4 +1,4 @@
-import Togglable from "./Togglable";
+import Togglable from "../reciclables/Togglable";
 
 const Blog = ({ blog, user, handleUpdateBlog, handleDeleteBlog }) => {
   const deleteBlogToDB = (b) => {
