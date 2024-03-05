@@ -15,17 +15,31 @@ const Togglable = forwardRef(({ children }, refs) => {
   });
 
   return (
-    <>
+    <div>
       <div style={hideWhenVisible}>
         <br />
-        <button className="showButton" onClick={toggleVisibility}>show</button>
+
+        <button
+          className="px-8 rounded-full bg-blue-600 text-white"
+          onClick={toggleVisibility}
+        >
+          show
+        </button>
       </div>
       <div style={showWhenVisible} className="togglableContent">
         {children}
         <br />
-        <button onClick={toggleVisibility}>hide</button>
+
+        <div className="flex flex-col items-center">
+          <button
+            className="w-16 rounded-full bg-blue-600 text-white"
+            onClick={toggleVisibility}
+          >
+            hide
+          </button>
+        </div>
       </div>
-    </>
+    </div>
   );
 });
 

@@ -8,24 +8,21 @@ import BlogContainer from "./components/blogs/BlogContainer";
 import LoginInfo from "./components/login/LoginInfo";
 import UsersContainer from "./components/users/UsersContainer";
 import User from "./components/users/User";
+import Title from "./components/titles/title";
+import BlogView from "./components/blogs/BlogView";
 
 import { loginUser, setLocalUser } from "./reducers/userReducer";
 import { initializeUsers } from "./reducers/usersReducer";
-import {
-  initializeBlogs,
-  createNewBlog,
-  deleteOneBlog,
-  updateBlogLikes,
-} from "./reducers/blogsReducer";
+import { initializeBlogs, createNewBlog } from "./reducers/blogsReducer";
 import { setNotification } from "./reducers/notificationReducer";
 import { setError } from "./reducers/errorReducer";
 import { useSelector, useDispatch } from "react-redux";
-import Title from "./components/titles/title";
 
 const App = () => {
   const dispatch = useDispatch();
   let user = useSelector((state) => state.user);
   const users = useSelector((state) => state.users);
+  const blogs = useSelector((state) => state.blogs);
 
   //EFFECT HOOKS
   //GET USER FROM LOCAL STORAGE
@@ -62,18 +59,10 @@ const App = () => {
     dispatch(createNewBlog(blog));
     dispatch(setNotification(`new blog created : ${blog.title}`, 5));
   };
-  const handleDeleteBlog = (blog) => {
-    dispatch(deleteOneBlog(blog));
-    dispatch(setNotification(`you deleted blog : ${blog.title}`, 5));
-  };
-  const handleUpdateBlog = (blog) => {
-    dispatch(updateBlogLikes(blog));
-    dispatch(setNotification(`you voted : ${blog.title}`, 5));
-  };
 
   //RETURN
   return (
-    <div>
+    <div className="flex flex-col items-center">
       {user === null ? (
         <LoginForm handleSubmit={handleLogin} />
       ) : (
@@ -86,9 +75,8 @@ const App = () => {
               element={
                 <BlogContainer
                   user={user}
+                  blogs={blogs}
                   handleNewBlog={handleNewBlog}
-                  handleUpdateBlog={handleUpdateBlog}
-                  handleDeleteBlog={handleDeleteBlog}
                 />
               }
             />
@@ -103,6 +91,10 @@ const App = () => {
               }
             />
             <Route path="/users/:id" element={<User users={users} />} />
+            <Route
+              path="/blogs/:id"
+              element={<BlogView user={user} blogs={blogs} />}
+            />
           </Routes>
         </Router>
       )}

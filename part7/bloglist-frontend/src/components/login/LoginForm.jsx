@@ -1,6 +1,8 @@
 import Error from "../messages/ErrorMessage";
 import PropTypes from "prop-types";
 import useField from "../../hooks/useField";
+import Button from "../buttons/Button";
+import Title from "../titles/title";
 
 const LoginForm = ({ handleSubmit }) => {
   const username = useField("text");
@@ -16,24 +18,22 @@ const LoginForm = ({ handleSubmit }) => {
   };
 
   return (
-    <>
-      <h2>Log in to application</h2>
+    <div className="flex flex-col items-center">
+      <Title type={"h1"} text={"Log in to app"} />
       <Error />
 
-      <form onSubmit={sendLogIn}>
-        <div>
+      <form className="flex flex-col items-center" onSubmit={sendLogIn}>
+        <div className="my-2">
           username
-          <input {...username} />
+          <input className="ml-2 border-2 border-black" {...username} />
         </div>
-        <div>
+        <div className="my-2">
           password
-          <input {...password} />
+          <input className="ml-2 border-2 border-black" {...password} />
         </div>
-        <button id="login-button" type="submit">
-          log in
-        </button>
+        <Button text={"log in"} type="subimit" />
       </form>
-    </>
+    </div>
   );
 };
 LoginForm.propTypes = {

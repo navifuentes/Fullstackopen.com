@@ -1,10 +1,11 @@
 import { useState, useRef } from "react";
 import Togglable from "../reciclables/Togglable";
+import useField from "../../hooks/useField";
 
 const BlogForm = ({ handleNewBlog }) => {
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [url, setUrl] = useState("");
+  const title = useField("text");
+  const author = useField("text");
+  const url = useField("text");
   const blogFormRef = useRef();
 
   const handleSubmit = (e) => {
@@ -23,38 +24,36 @@ const BlogForm = ({ handleNewBlog }) => {
 
   return (
     <Togglable ref={blogFormRef}>
-      <form onSubmit={handleSubmit}>
-        <div>
+      <form className="flex flex-col items-center" onSubmit={handleSubmit}>
+        <div className="my-2">
           Title :{" "}
           <input
-            id="title"
-            type="text"
-            name="title"
-            value={title}
+            className="border-2 border-x-slate-600"
+            {...title}
             onChange={({ target }) => setTitle(target.value)}
           />
         </div>
-        <div>
+        <div className="my-2">
           Author :{" "}
           <input
-            id="author"
-            type="text"
-            name="author"
-            value={author}
+            className="border-2 border-x-slate-600"
+            {...author}
             onChange={({ target }) => setAuthor(target.value)}
           />
         </div>
-        <div>
+        <div className="my-2">
           url :{" "}
           <input
-            id="url"
-            type="text"
-            name="url"
-            value={url}
+            className="border-2 border-x-slate-600"
+            {...url}
             onChange={({ target }) => setUrl(target.value)}
           />
         </div>
-        <button id="create-button" type="submit">
+        <button
+          className="w-20 rounded-full bg-blue-600 text-white "
+          id="create-button"
+          type="submit"
+        >
           create
         </button>
       </form>

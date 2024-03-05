@@ -1,17 +1,11 @@
-import Blog from "./Blog";
 import BlogForm from "./BlogForm";
-
-
-import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const BlogContainer = ({
   user,
+  blogs,
   handleNewBlog,
-  handleUpdateBlog,
-  handleDeleteBlog,
 }) => {
-  const blogs = useSelector((state) => state.blogs);
-
   return (
     <>
       <BlogForm user={user} handleNewBlog={handleNewBlog} />
@@ -21,13 +15,13 @@ const BlogContainer = ({
       {[...blogs]
         .sort((a, b) => b.likes - a.likes)
         .map((blog) => (
-          <Blog
+          <Link
+            className="my-1 px-5 border-2 border-black"
             key={blog.id}
-            user={user}
-            blog={blog}
-            handleUpdateBlog={handleUpdateBlog}
-            handleDeleteBlog={handleDeleteBlog}
-          />
+            to={`blogs/${blog.id}`}
+          >
+            {blog.title}, by {blog.author}
+          </Link>
         ))}
     </>
   );
