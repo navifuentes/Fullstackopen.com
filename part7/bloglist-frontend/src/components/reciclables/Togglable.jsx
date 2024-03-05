@@ -1,6 +1,6 @@
 import { React, useState, forwardRef, useImperativeHandle } from "react";
 
-const Togglable = forwardRef(({ children }, refs) => {
+const Togglable = forwardRef(({ children, text }, refs) => {
   const [visible, setVisible] = useState(false);
 
   const hideWhenVisible = { display: visible ? "none" : "" };
@@ -23,7 +23,7 @@ const Togglable = forwardRef(({ children }, refs) => {
           className="px-8 rounded-full bg-blue-600 text-white"
           onClick={toggleVisibility}
         >
-          show
+          {text}
         </button>
       </div>
       <div style={showWhenVisible} className="togglableContent">

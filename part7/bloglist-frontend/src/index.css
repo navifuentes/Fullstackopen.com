@@ -632,6 +632,14 @@ video {
   height: 1.5rem;
 }
 
+.h-4 {
+  height: 1rem;
+}
+
+.h-40 {
+  height: 10rem;
+}
+
 .w-10 {
   width: 2.5rem;
 }
@@ -662,6 +670,10 @@ video {
 
 .items-center {
   align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
 }
 
 .justify-between {
@@ -739,12 +751,21 @@ video {
   padding-bottom: 0.5rem;
 }
 
+.px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
 .pl-10 {
   padding-left: 2.5rem;
 }
 
 .pl-2 {
   padding-left: 0.5rem;
+}
+
+.pb-5 {
+  padding-bottom: 1.25rem;
 }
 
 .text-2xl {
@@ -762,12 +783,21 @@ video {
   line-height: 1;
 }
 
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
 .font-bold {
   font-weight: 700;
 }
 
 .font-medium {
   font-weight: 500;
+}
+
+.font-semibold {
+  font-weight: 600;
 }
 
 .text-white {

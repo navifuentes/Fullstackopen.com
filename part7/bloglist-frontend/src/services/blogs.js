@@ -9,6 +9,10 @@ const setToken = (newToken) => {
 
 const getAll = async () => {
   try {
+    const config = {
+      headers: { Authorization: token },
+    };
+
     const request = await axios.get(baseUrl);
     return request.data;
   } catch (error) {
@@ -21,34 +25,55 @@ const create = async (newObject) => {
     const config = {
       headers: { Authorization: token },
     };
-    const response = await axios.post(baseUrl, newObject, config);
-    return response.data;
+
+    const request = await axios.post(baseUrl, newObject, config);
+    return request.data;
+  } catch (error) {
+    console.log("front service", error);
+  }
+};
+
+const update = async (id, newObject) => {
+  try {
+    const config = {
+      headers: { Authorization: token },
+    };
+
+    const request = await axios.put(`${baseUrl}/${id}`, newObject, config);
+    return request.data;
   } catch (error) {
     console.log(error);
   }
 };
 
-const update = (id, newObject) => {
+const updateComment = async (id, comment) => {
   try {
     const config = {
       headers: { Authorization: token },
     };
-    const request = axios.put(`${baseUrl}/${id}`, newObject, config);
-    return request.then((response) => response.data);
+
+    const request = await axios.put(
+      `${baseUrl}/${id}/comments`,
+      comment,
+      config
+    );
+    return request.data;
   } catch (error) {
     console.log(error);
   }
 };
-const remove = (id) => {
+
+const remove = async (id) => {
   try {
     const config = {
       headers: { Authorization: token },
     };
+
     const request = axios.delete(`${baseUrl}/${id}`, config);
-    return request.then((response) => response.data);
+    return request.data;
   } catch (error) {
     console.log(error);
   }
 };
 
-export default { getAll, create, update, remove, setToken };
+export default { getAll, create, update, updateComment, remove, setToken };

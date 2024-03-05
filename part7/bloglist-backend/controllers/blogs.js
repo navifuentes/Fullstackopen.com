@@ -63,6 +63,7 @@ blogsRouter.put("/:id", userExtractor, async (req, res, next) => {
     author: body.author,
     url: body.url,
     likes: body.likes,
+    comments: body.comments,
   };
 
   try {
@@ -77,6 +78,28 @@ blogsRouter.put("/:id", userExtractor, async (req, res, next) => {
     } else if (blog.user.toString() !== user.id.toString()) {
       return res.status(401).send({ error: "wrong authentication" });
     }
+  } catch (error) {
+    next(error);
+  }
+});
+blogsRouter.put("/:id/comments", userExtractor, async (req, res, next) => {
+  const { id } = req.params;
+  const { comment } = req.body;
+
+  const commentToAdd = {
+    content: comment,
+    date: new Date().toUTCString(),
+  };
+
+  try {
+    const updatedBlog = await Blog.findByIdAndUpdate(
+      id,
+      {
+        $push: { comments: commentToAdd },
+      },
+      { new: true }
+    );
+    res.status(200).json(updatedBlog);
   } catch (error) {
     next(error);
   }
