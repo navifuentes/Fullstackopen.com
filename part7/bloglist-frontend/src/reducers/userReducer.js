@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import loginService from "../services/login";
+import blogsService from "../services/blogs";
 
 const initialState = null;
 
@@ -19,6 +20,8 @@ export const loginUser = (credentials) => {
   return async (dispatch) => {
     try {
       const user = await loginService.login(credentials);
+
+      blogsService.setToken(user.token);
       dispatch(setUser(user));
       window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
     } catch (error) {
