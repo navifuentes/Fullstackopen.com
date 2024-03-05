@@ -6,7 +6,8 @@ import blogService from "./services/blogs";
 import LoginForm from "./components/login/LoginForm";
 import BlogContainer from "./components/blogs/BlogContainer";
 import LoginInfo from "./components/login/LoginInfo";
-import UserContainer from "./components/users/UserContainer";
+import UsersContainer from "./components/users/UsersContainer";
+import User from "./components/users/User";
 
 import { loginUser, setLocalUser } from "./reducers/userReducer";
 import { initializeUsers } from "./reducers/usersReducer";
@@ -72,7 +73,7 @@ const App = () => {
 
   //RETURN
   return (
-    <div >
+    <div>
       {user === null ? (
         <LoginForm handleSubmit={handleLogin} />
       ) : (
@@ -94,13 +95,14 @@ const App = () => {
             <Route
               path="/users"
               element={
-                <UserContainer
+                <UsersContainer
                   user={user}
                   users={users}
                   handleLogout={handleLogout}
                 />
               }
             />
+            <Route path="/users/:id" element={<User users={users} />} />
           </Routes>
         </Router>
       )}
