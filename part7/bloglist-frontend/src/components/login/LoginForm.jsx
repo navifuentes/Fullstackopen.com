@@ -1,12 +1,12 @@
 import Error from "../messages/ErrorMessage";
 import PropTypes from "prop-types";
-import useField from "../../hooks/useField";
+import { useField } from "../../hooks/useField";
 import Button from "../buttons/Button";
 import Title from "../titles/title";
 
 const LoginForm = ({ handleSubmit }) => {
-  const username = useField("text");
-  const password = useField("password");
+  const [username] = useField("text");
+  const [password] = useField("password");
 
   const sendLogIn = (e) => {
     e.preventDefault();

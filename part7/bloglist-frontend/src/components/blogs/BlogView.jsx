@@ -2,17 +2,21 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import Title from "../titles/title";
 
-import { updateBlogLikes, deleteOneBlog } from "../../reducers/blogsReducer";
+import {
+  updateBlogLikes,
+  updateBlogComments,
+  deleteOneBlog,
+} from "../../reducers/blogsReducer";
 import { setNotification } from "../../reducers/notificationReducer";
 import { useDispatch } from "react-redux";
 
-import useField from "../../hooks/useField";
+import {useField} from "../../hooks/useField";
 
 const BlogView = ({ user, blogs }) => {
   const dispatch = useDispatch();
   const id = useParams().id;
   const blog = blogs.find((b) => b.id === id);
-  const comment = useField("text");
+  const [comment, resetComment] = useField("text")
 
   const handleDeleteBlog = (blog) => {
     dispatch(deleteOneBlog(blog));
@@ -21,6 +25,15 @@ const BlogView = ({ user, blogs }) => {
   const handleUpdateBlog = (blog) => {
     dispatch(updateBlogLikes(blog));
     dispatch(setNotification(`you voted : ${blog.title}`, 5));
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const commentToAdd = {
+      comment: comment.value,
+    };
+    resetComment()
+    dispatch(updateBlogComments(blog, commentToAdd));
+    dispatch(setNotification(`you commented the blog !`, 5));
   };
 
   if (!blog) {
@@ -58,6 +71,27 @@ const BlogView = ({ user, blogs }) => {
           </li>
         ))}
       </ul>
+      <form
+        onSubmit={handleSubmit}
+        className="pb-5 flex flex-col items-center"
+        action="submit"
+      >
+        <div className="my-2 text-xl underline font-semibold">
+          Leave a comment !
+        </div>
+        <textarea
+          placeholder="... ✍"
+          cols="30"
+          rows="3"
+          {...comment}
+        ></textarea>
+        <button
+          className="w-20 my-2 rounded-full bg-blue-600 text-white"
+          type="submit"
+        >
+          submit
+        </button>
+      </form>
     </div>
   );
 };

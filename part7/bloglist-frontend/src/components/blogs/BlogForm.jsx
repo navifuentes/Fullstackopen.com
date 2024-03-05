@@ -1,11 +1,11 @@
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import Togglable from "../reciclables/Togglable";
-import useField from "../../hooks/useField";
+import {useField} from "../../hooks/useField";
 
 const BlogForm = ({ handleNewBlog }) => {
-  const title = useField("text");
-  const author = useField("text");
-  const url = useField("text");
+  const [title, resetTitle] = useField("text");
+  const [author, resetAuthor] = useField("text");
+  const [url, resetUrl] = useField("text");
   const blogFormRef = useRef();
 
   const handleSubmit = (e) => {
@@ -16,6 +16,9 @@ const BlogForm = ({ handleNewBlog }) => {
       author: author.value,
       url: url.value,
     };
+    resetTitle();
+    resetAuthor();
+    resetUrl();
     handleNewBlog(newBlog);
   };
 

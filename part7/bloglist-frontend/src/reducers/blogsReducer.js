@@ -24,11 +24,22 @@ const blogsReducer = createSlice({
         b.id !== action.payload.id ? b : action.payload
       );
     },
+    commentBlog(state, action) {
+      return [...state].map((b) =>
+        b.id !== action.payload.id ? b : action.payload
+      );
+    },
   },
 });
 
-export const { setBlogs, addNewBlog, deleteBlog, cleanBlogs, voteBlog } =
-  blogsReducer.actions;
+export const {
+  setBlogs,
+  addNewBlog,
+  deleteBlog,
+  cleanBlogs,
+  voteBlog,
+  commentBlog,
+} = blogsReducer.actions;
 
 export const initializeBlogs = () => {
   return async (dispatch) => {
@@ -55,9 +66,14 @@ export const updateBlogLikes = (b) => {
       ...b,
       likes: b.likes + 1,
     };
-    console.log("updatedBlog", updatedBlog);
     await blogsService.update(b.id, updatedBlog);
     dispatch(voteBlog(updatedBlog));
+  };
+};
+export const updateBlogComments = (b, comment) => {
+  return async (dispatch) => {
+    const updatedBlog = await blogsService.updateComment(b.id, comment);
+    dispatch(commentBlog(updatedBlog));
   };
 };
 
