@@ -14,10 +14,26 @@ const Recommend = () => {
   }
   user = resultUser.data.me;
   books = resultBooks.data.allBooks;
+
+  const filterBooks = books.filter((b) =>
+    b.genres.includes(user.favoriteGenre)
+  );
+
   console.log("user", user);
   console.log("books", books);
+  console.log("filterbooks", filterBooks);
+  console.log(filterBooks.length);
 
-  return <div>Recommend</div>;
+  return (
+    <div>
+      <h2>recommendatios</h2>
+      {filterBooks.length === 0 ? (
+        <div>no matches for {user.favoriteGenre}</div>
+      ) : (
+        filterBooks.map((b) => <div key={b.id}>{b.title}</div>)
+      )}
+    </div>
+  );
 };
 
 export default Recommend;
