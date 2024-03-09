@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { useApolloClient } from "@apollo/client";
 
 //COMPONENTS
 import Authors from "./components/Authors";
@@ -9,9 +10,16 @@ import LoginForm from "./components/LoginForm";
 
 const App = () => {
   const [token, setToken] = useState(null);
+  const client = useApolloClient();
+
+  const logout = () => {
+    setToken(null);
+    localStorage.clear();
+    client.resetStore();
+  };
 
   useEffect(() => {
-    const token = window.localStorage.getItem("userToken");
+    const token = localStorage.getItem("userToken");
     if (token) {
       setToken(token);
     } else if (!token) {
@@ -39,6 +47,7 @@ const App = () => {
       <Link to={"/books/add"}>
         <button>add book</button>
       </Link>
+      <button onClick={logout}>Logout</button>
       <Routes>
         <Route path="/" element={<Authors />} />
         <Route path="/books" element={<Books />} />

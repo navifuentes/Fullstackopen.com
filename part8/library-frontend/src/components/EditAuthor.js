@@ -16,7 +16,6 @@ const EditAuthor = ({ authors }) => {
     console.log("updated born year");
     editYear({ variables: { name, setBornTo: year } });
 
-    setName("");
     setYear("");
   };
 

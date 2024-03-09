@@ -88,13 +88,19 @@ const resolvers = {
       const author = (await Author.findOne({ name: args.author })) || false;
 
       if (args.author && !args.genre) {
-        return Book.find({ author: author._id });
+        return Book.find({ author: author._id }).populate("author");
       } else if (!args.author && args.genre) {
-        return Book.find({ genres: args.genre });
+        const result = await Book.find({ genres: args.genre }).populate(
+          "author"
+        );
+
+        return result;
       } else if (args.author && args.genre) {
-        return Book.find({ author: author._id, genres: args.genre });
+        return Book.find({ author: author._id, genres: args.genre }).populate(
+          "author"
+        );
       } else if (!args.author && !args.genre) {
-        return Book.find({});
+        return Book.find({}).populate("author");
       }
     },
     allAuthors: async () => {
@@ -140,10 +146,11 @@ const resolvers = {
         const author = new Author({ name: args.author });
         await author.save();
         const book = new Book({ ...args, author: author._id });
-        return book.save();
+        await book.save().catch((err) => console.log("err:", err));
+        return Book.findOne({ title: book.title }).populate("author");
       }
       const book = new Book({ ...args, author: isAuthor._id });
-      return book.save().catch((error) => {
+      await book.save().catch((error) => {
         throw new GraphQLError("Saving book failed", {
           extensions: {
             code: "BAD_USER_INPUT",
@@ -152,6 +159,7 @@ const resolvers = {
           },
         });
       });
+      return Book.findOne({ title: book.title }).populate("author");
     },
     addAuthor: async (root, args) => {
       if (args.name.length < 4) {
@@ -188,15 +196,14 @@ const resolvers = {
           },
         });
       }
-      console.log("foundAuthor", foundAuthor);
       const updateAuthor = {
         ...foundAuthor._doc,
         id: foundAuthor._id,
         born: args.setBornTo,
       };
-      console.log("update", updateAuthor);
-
-      return updateAuthor;
+      return Author.findByIdAndUpdate(updateAuthor._id, updateAuthor, {
+        new: true,
+      });
     },
     createUser: async (root, args) => {
       const user = new User({ ...args });
@@ -247,9 +254,9 @@ startStandaloneServer(server, {
         process.env.JWT_SECRET
       );
       const currentUser = await User.findById(decodedToken.id);
-      console.log("currentuser", currentUser);
       return { currentUser };
     }
+    return;
   },
 }).then(({ url }) => {
   console.log(`Server ready at ${url}`);
