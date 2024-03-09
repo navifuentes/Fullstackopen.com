@@ -1,11 +1,33 @@
+import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 //COMPONENTS
 import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
+import LoginForm from "./components/LoginForm";
 
 const App = () => {
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    const token = window.localStorage.getItem("userToken");
+    if (token) {
+      setToken(token);
+    } else if (!token) {
+      setToken(null);
+    }
+  }, [token]);
+
+  if (!token) {
+    return (
+      <div>
+        <h2>Login</h2>
+        <LoginForm setToken={setToken}></LoginForm>
+      </div>
+    );
+  }
+
   return (
     <Router>
       <Link to={"/"}>
