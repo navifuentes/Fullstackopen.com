@@ -7,6 +7,7 @@ import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
 import LoginForm from "./components/LoginForm";
+import Recommend from "./components/Recommend";
 
 const App = () => {
   const [token, setToken] = useState(null);
@@ -47,11 +48,15 @@ const App = () => {
       <Link to={"/books/add"}>
         <button>add book</button>
       </Link>
+      <Link to={"/recommend"}>
+        <button>recommend</button>
+      </Link>
       <button onClick={logout}>Logout</button>
       <Routes>
         <Route path="/" element={<Authors />} />
         <Route path="/books" element={<Books />} />
         <Route path="/books/add" element={<NewBook />} />
+        <Route path="/recommend" element={<Recommend />} />
       </Routes>
     </Router>
   );
