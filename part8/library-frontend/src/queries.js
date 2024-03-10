@@ -74,6 +74,17 @@ export const ADD_BOOK = gql`
     }
   }
 `;
+export const BOOK_DETAILS = gql`
+  fragment BookDetails on Book {
+    title
+    id
+    published
+    genres
+    author {
+      name
+    }
+  }
+`;
 export const EDIT_YEAR = gql`
   mutation editAuthor($name: String!, $setBornTo: Int!) {
     editAuthor(name: $name, setBornTo: $setBornTo) {
@@ -81,4 +92,13 @@ export const EDIT_YEAR = gql`
       born
     }
   }
+`;
+export const BOOK_ADDED = gql`
+  subscription {
+    bookAdded {
+      ...BookDetails
+    }
+  }
+
+  ${BOOK_DETAILS}
 `;

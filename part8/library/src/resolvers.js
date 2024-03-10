@@ -73,22 +73,32 @@ const resolvers = {
         await author.save();
         const book = new Book({ ...args, author: author._id });
         await book.save().catch((err) => console.log("err:", err));
-        return Book.findOne({ title: book.title }).populate("author");
+        const returnBook = await Book.findOne({ title: book.title }).populate(
+          "author"
+        );
+        pubsub.publish("BOOK_ADDED", { bookAdded: returnBook });
+        return returnBook;
+      } else {
+        const book = new Book({ ...args, author: isAuthor._id });
+        try {
+          await book.save();
+        } catch (error) {
+          throw new GraphQLError("Saving book failed", {
+            extensions: {
+              code: "BAD_USER_INPUT",
+              invalidArgs: "args.title",
+              error,
+            },
+          });
+        }
+        console.log("book :", book);
+        const returnBook = await Book.findOne({ title: book.title }).populate(
+          "author"
+        );
+        console.log("returnBOok: ", returnBook);
+        pubsub.publish("BOOK_ADDED", { bookAdded: returnBook });
+        return returnBook;
       }
-      const book = new Book({ ...args, author: isAuthor._id });
-      await book.save().catch((error) => {
-        throw new GraphQLError("Saving book failed", {
-          extensions: {
-            code: "BAD_USER_INPUT",
-            invalidArgs: "args.title",
-            error,
-          },
-        });
-      });
-
-      pubsub.publish("BOOK_ADDED", { bookAdded: book });
-
-      return Book.findOne({ title: book.title }).populate("author");
     },
     addAuthor: async (root, args) => {
       if (args.name.length < 4) {
@@ -168,7 +178,7 @@ const resolvers = {
   },
   Subscription: {
     bookAdded: {
-      subscribe: () => pubsub.asyncIterator("BOOK_ADDED"),
+      subscribe: () => pubsub.asyncIterator(["BOOK_ADDED"]),
     },
   },
 };
