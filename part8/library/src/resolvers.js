@@ -30,20 +30,8 @@ const resolvers = {
         return Book.find({}).populate("author");
       }
     },
-    allAuthors: async () => {
-      console.log("AUTHOR.FIND");
-      const authors = await Author.find({});
-      const result = authors.map((a) => {
-        return {
-          id: a._id,
-          name: a.name,
-          born: a.born,
-          bookCount: a.books.length,
-        };
-      });
+    allAuthors: async () => Author.find({}),
 
-      return result;
-    },
     me: (root, args, context) => {
       return context.currentUser;
     },
