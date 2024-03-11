@@ -32,9 +32,11 @@ mongoose
     console.log("error connection to MongoDB:", error.message);
   });
 
+mongoose.set("debug", true);
+
 const start = async () => {
   const schema = makeExecutableSchema({ typeDefs, resolvers });
-  
+
   const app = express();
   const httpServer = http.createServer(app);
 
@@ -42,7 +44,7 @@ const start = async () => {
     server: httpServer,
     path: "/",
   });
-  
+
   const serverCleanup = useServer({ schema }, wsServer);
 
   const server = new ApolloServer({
@@ -75,8 +77,8 @@ const start = async () => {
             auth.substring(7),
             process.env.JWT_SECRET
           );
-          const currentUser = await User.findById(decodedToken.id)
-          
+          const currentUser = await User.findById(decodedToken.id);
+
           return { currentUser };
         }
       },

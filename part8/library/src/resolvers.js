@@ -5,6 +5,7 @@ const pubsub = new PubSub();
 const Author = require("./models/author");
 const Book = require("./models/book");
 const User = require("./models/user");
+const author = require("./models/author");
 
 const resolvers = {
   Query: {
@@ -30,20 +31,28 @@ const resolvers = {
       }
     },
     allAuthors: async () => {
+      console.log("AUTHOR.FIND");
       const authors = await Author.find({});
-      const result = authors.map(async (a) => {
-        const count = await Book.countDocuments({ author: a._id });
+      const result = authors.map((a) => {
         return {
-          ...a._doc,
-          id: a._doc._id,
-          bookCount: count,
+          id: a._id,
+          name: a.name,
+          born: a.born,
+          bookCount: a.books.length,
         };
       });
+
       return result;
     },
     me: (root, args, context) => {
       return context.currentUser;
     },
+  },
+  Author: {
+    bookCount: async (root) => root.books.length,
+  },
+  Book: {
+    author: async (root) => await Author.findById(root.author),
   },
   Mutation: {
     addBook: async (root, args, { currentUser }) => {
@@ -68,36 +77,41 @@ const resolvers = {
       }
 
       const isAuthor = await Author.findOne({ name: args.author });
-      if (!isAuthor) {
-        const author = new Author({ name: args.author });
-        await author.save();
-        const book = new Book({ ...args, author: author._id });
-        await book.save().catch((err) => console.log("err:", err));
-        const returnBook = await Book.findOne({ title: book.title }).populate(
-          "author"
-        );
-        pubsub.publish("BOOK_ADDED", { bookAdded: returnBook });
-        return returnBook;
-      } else {
-        const book = new Book({ ...args, author: isAuthor._id });
-        try {
+
+      try {
+        if (!isAuthor) {
+          const author = new Author({ name: args.author });
+          const book = new Book({ ...args, author: author._id });
+          author.books = author.books.concat(book._id);
+          await author.save();
           await book.save();
-        } catch (error) {
-          throw new GraphQLError("Saving book failed", {
-            extensions: {
-              code: "BAD_USER_INPUT",
-              invalidArgs: "args.title",
-              error,
-            },
-          });
+
+          const returnBook = await Book.findOne({ title: book.title }).populate(
+            "author"
+          );
+          pubsub.publish("BOOK_ADDED", { bookAdded: returnBook });
+          return returnBook;
+        } else {
+          const book = new Book({ ...args, author: isAuthor._id });
+          isAuthor.books = isAuthor.books.concat(book._id);
+          await isAuthor.save();
+          await book.save();
+
+          const returnBook = await Book.findOne({ title: book.title }).populate(
+            "author"
+          );
+
+          pubsub.publish("BOOK_ADDED", { bookAdded: returnBook });
+          return returnBook;
         }
-        console.log("book :", book);
-        const returnBook = await Book.findOne({ title: book.title }).populate(
-          "author"
-        );
-        console.log("returnBOok: ", returnBook);
-        pubsub.publish("BOOK_ADDED", { bookAdded: returnBook });
-        return returnBook;
+      } catch (error) {
+        throw new GraphQLError("Saving book failed", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+            invalidArgs: "args.title",
+            error,
+          },
+        });
       }
     },
     addAuthor: async (root, args) => {
@@ -159,7 +173,7 @@ const resolvers = {
     },
     login: async (root, args) => {
       const user = await User.findOne({ username: args.username });
-      console.log("user", user);
+
       if (!user || args.password !== "secret") {
         throw new GraphQLError("wrong credentials", {
           extensions: {
@@ -172,7 +186,7 @@ const resolvers = {
         id: user._id,
         favoriteGenre: user.favoriteGenre,
       };
-      console.log("userfortoken", userForToken);
+
       return { value: jwt.sign(userForToken, process.env.JWT_SECRET) };
     },
   },
