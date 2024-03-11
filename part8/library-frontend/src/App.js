@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { useApolloClient } from "@apollo/client";
 import { useSubscription } from "@apollo/client";
-import { BOOK_ADDED } from "./queries";
+import { BOOK_ADDED, ALL_BOOKS } from "./queries";
 
 //COMPONENTS
 import Authors from "./components/Authors";
@@ -11,14 +11,31 @@ import NewBook from "./components/NewBook";
 import LoginForm from "./components/LoginForm";
 import Recommend from "./components/Recommend";
 
+export const updateCache = (cache, query, addedBook) => {
+  const uniqByName = (a) => {
+    let seen = new Set();
+    return a.filter((item) => {
+      let k = item.title;
+      return seen.has(k) ? false : seen.add(k);
+    });
+  };
+
+  cache.updateQuery(query, ({ allBooks }) => {
+    return {
+      allBooks: uniqByName(allBooks.concat(addedBook)),
+    };
+  });
+};
+
 const App = () => {
   const [token, setToken] = useState(null);
   const client = useApolloClient();
 
   useSubscription(BOOK_ADDED, {
     onData: ({ data }) => {
-      console.log(data.data);
-      window.alert(`New book added from App.js!`);
+      const addedBook = data.data.bookAdded;
+      window.alert(`${addedBook.title} by ${addedBook.author.name} added`);
+      updateCache(client.cache, { query: ALL_BOOKS }, addedBook);
     },
   });
 
